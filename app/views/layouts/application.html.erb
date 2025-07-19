@@ -1,5 +1,7 @@
 <!DOCTYPE html>
 <html>
+<%= render "shared/navbar" %>
+<%= render "shared/flashes" %>
   <head>
     <title>CostumeRentalApp</title>
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -12,5 +14,7 @@
 
   <body>
     <%= yield %>
+    <p class="notice"><%= notice %></p>
+    <p class="alert"><%= alert %></p>
   </body>
 </html>
