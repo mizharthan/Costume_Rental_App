@@ -60,7 +60,6 @@ ActiveRecord::Schema[7.1].define(version: 2025_07_22_121725) do
     t.date "start_date"
     t.date "end_date"
     t.string "status"
-    t.integer "price"
     t.float "price"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
