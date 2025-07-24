@@ -1,7 +1,7 @@
 class RentalsController < ApplicationController
   before_action :authenticate_user!
 
-  def index
+  def rental_request_list
     @rentals = current_user.rentals.includes(:costume)
   end
 
