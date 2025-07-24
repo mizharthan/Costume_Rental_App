@@ -1,0 +1,33 @@
+<%= form_with(model: costume, local: true) do |form| %>
+  <h2>Make a Costume</h2>
+
+  <div>
+    <%= form.label :size, "Costume Size" %><br>
+    <%= form.text_field :size %>
+  </div>
+
+  <div>
+    <%= form.label :name, "Costume Name" %><br>
+    <%= form.text_field :name %>
+  </div>
+
+  <div>
+    <%= form.label :description, "Costume Description" %><br>
+    <%= form.text_area :description %>
+  </div>
+
+  <div>
+    <%= form.label :price_per_day, "Price per Day (¥)" %><br>
+    <%= form.number_field :price_per_day %>
+  </div>
+
+  <div>
+    <%= form.label :image, "Costume Image URL" %><br>
+    <%= form.text_field :image %> <!-- Optional: replace with file_field if using uploads -->
+  </div>
+
+  <!-- Hidden field: user_id is set from current_user -->
+  <%= form.hidden_field :user_id, value: current_user.id %>
+
+  <%= form.submit "Create Costume" %>
+<% end %>
