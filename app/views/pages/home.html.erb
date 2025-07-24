@@ -1,2 +1,36 @@
-<h1>Pages#home</h1>
-<p>Find me in app/views/pages/home.html.erb</p>
+<nav class="navbar bg-body-tertiary">
+  <div class="container-fluid">
+    <a class="navbar-brand">Costumes</a>
+    <form class="d-flex" role="search">
+      <input class="form-control me-2" type="search" placeholder="Search for costumes..." aria-label="Search"/>
+      <button class="btn btn-outline-success" type="submit">Search</button>
+    </form>
+  </div>
+</nav>
+
+<div class="container mt-5">
+  <h1 class="mb-4">Explore costumes</h1>
+
+    <%= [["Popular Costumes", @popular_costumes], ["Superhero Costumes", @superhero_costumes], ["Anime Costumes", @anime_costumes]].each do |title, costumes| %>
+      <h2 class="mt-5"><%= title %></h2>
+        <div class="row">
+          <% costumes.each do |costume| %>
+            <div class="col md-4 mb-3">
+              <div class="card h-100">
+                <% if costume.photo.attached? %>
+                  <%= cl_image_tag costume.photo.key, height: 300, width: 400, crop: :fill, class: "card-img-top img-fluid",  alt: costume.name %>
+                <% else %>
+                  <%= image_tag "https://via.placeholder.com/400x300?text=No+Image", class: "card-img-top", alt: "No image available" %>
+                <% end %>
+                <div class="card-body">
+                  <h5 class="card-title"><%= costume.name %></h5>
+                  <p class="card-text"><%= costume.description %></p>
+                  <p class="card-text"><strong>Є<%= costume.price_per_day %>/day</strong></p>
+                  <%= link_to "View details", costume_path(costume), class: "btn btn-outline-primary" %>
+                </div>
+              </div>
+            </div>
+          <% end %>
+        </div>
+    <% end %>
+</div>
