@@ -1,0 +1,19 @@
+<h1>My Rental Requests</h1>
+
+<% if @rentals.any? %>
+  <% @rentals.each do |rental| %>
+    <div class="rental-card">
+      <% days = (rental.end_date - rental.start_date).to_i %>
+      <% total_price = days * rental.costume.price_per_day %>
+
+      <h2><%= rental.costume.name %></h2>
+      <p>From: <%= rental.start_date.strftime('%Y-%m-%d') %>
+        To: <%= rental.end_date.strftime('%Y-%m-%d') %></p>
+      <p>Total: ¥<%= total_price %> for <%= days %> day<%= 's' if days > 1 %></p>
+      <p>Status: <%= rental.status.capitalize %></p>
+    </div>
+    <hr>
+  <% end %>
+<% else %>
+  <p>You haven't made any rental requests yet.</p>
+<% end %>
