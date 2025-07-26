@@ -12,7 +12,7 @@
     <%= f.input :end_date, as: :date, label: "End Date", input_html: { id: "end-date" }%>
   </div>
 
-  <p>Price per day: €<%= @costume.price_per_day %></p>
+  <p>Price per day: €<%= '%.2f' % @costume.price_per_day %></p>
   <p>Total price: €<span id="total-price"></span></p>
 
   <%= f.button :submit, "Send Rental Request", class: "btn btn-primary" %>
@@ -23,7 +23,7 @@
     const startDateInput = document.getElementById("start-date");
     const endDateInput = document.getElementById("end-date");
     const totalPriceSpan = document.getElementById("total-price");
-    const pricePerDay = <%= @costume.price_per_day || 0 %>;
+    const pricePerDay = <%= (@costume.price_per_day || 0).to_f.to_json.html_safe %>;
 
     function calculateTotal() {
       const startDate = new Date(startDateInput.value);
