@@ -1,5 +1,11 @@
 <h1><%= @costume.name %></h1>
+
+<% if @costume.photo.attached? %>
+  <%= image_tag @costume.photo, class: "img-fluid mb-3", style: "max-height: 300px;" %>
+<% end %>
+
 <p><%= @costume.description %></p>
 <p>Size: <%= @costume.size %></p>
-<p><strong>Price per day: Є<%= @costume.price_per_day %></strong></p>
+<p><strong>Price per day: €<%= @costume.price_per_day %></strong></p>
+
 <%= link_to "Create a Rental Request", new_costume_rental_path(@costume), class: "btn btn-primary" %>
