@@ -11,6 +11,7 @@ Rails.application.routes.draw do
   # Defines the root path route ("/")
   # root "posts#index"
   get "pages/home", to: "pages#home"
+  get "search", to: "pages#search"
 
   resources :costumes do
     resources :rentals, only: [:new, :create]
