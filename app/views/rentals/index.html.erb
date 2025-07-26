@@ -9,7 +9,7 @@
       <h2><%= rental.costume.name %></h2>
       <p>From: <%= rental.start_date.strftime('%Y-%m-%d') %>
         To: <%= rental.end_date.strftime('%Y-%m-%d') %></p>
-      <p>Total: ¥<%= total_price %> for <%= days %> day<%= 's' if days > 1 %></p>
+      <p>Total: €<%= total_price %> for <%= days %> day<%= 's' if days > 1 %></p>
       <p>Status: <%= rental.status.capitalize %></p>
     </div>
     <hr>
