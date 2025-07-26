@@ -2,3 +2,4 @@
 <p><%= @costume.description %></p>
 <p>Size: <%= @costume.size %></p>
 <p><strong>Price per day: Є<%= @costume.price_per_day %></strong></p>
+<%= link_to "Create a Rental Request", new_costume_rental_path(@costume), class: "btn btn-primary" %>
