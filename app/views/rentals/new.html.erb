@@ -12,7 +12,7 @@
     <%= f.input :end_date, as: :date, label: "End Date" %>
   </div>
 
-  <p>Price per day: <%= €@costume.price_per_day %></p>
+  <p>Price per day: €<%= @costume.price_per_day %></p>
 
   <%= f.button :submit, "Send Rental Request", class: "btn btn-primary" %>
 <% end %>
