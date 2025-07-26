@@ -4,7 +4,7 @@ class CostumesController < ApplicationController
     @costumes = Costume.all
 
     if params[:query].present?
-      @costumes = Costume.where("LOWER(name) LIKE", "%#{params[:query].downcase}%")
+      @costumes = Costume.where("name ILIKE ?", "%#{params[:query].downcase}%")
     else
       @costumes = Costume.all
     end
