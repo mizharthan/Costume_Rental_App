@@ -1,7 +1,7 @@
 class RentalsController < ApplicationController
   before_action :authenticate_user!
 
-  def rental_request_list
+  def index
     @rentals = current_user.rentals.includes(:costume)
   end
 
@@ -12,10 +12,11 @@ class RentalsController < ApplicationController
 
   def create
     @costume = Costume.find(params[:costume_id])
-    @rental = current_user.rentals.build(rental_params)
+    @rental = Rental.new(rental_params)
+    @rental.user = current_user
     @rental.costume = @costume
     @rental.status = "not_confirmed"
-    @rental.price = @costume.price_per_day * rental_duration_in_days
+    @rental.price = @costume.price_per_day * rental_days
 
     if @rental.save
       redirect_to rentals_path, notice: "Your rental request has been sent!"
@@ -24,24 +25,11 @@ class RentalsController < ApplicationController
     end
   end
 
-  def update
-    @rental = Rental.find(params[:id])
-    if @rental.costume.user == current_user
-      if @rental.update(status: params[:status])
-        redirect_to rentals_path, notice: "Rental request has been updated"
-      else
-        redirect_to rentals_path, alert: "Failed to update the rental status"
-      end
-    else
-      redirect_to root_path
-    end
-  end
-
   def destroy
     @rental = Rental.find(params[:id])
-    return unless @rental.user == current_user
-
+    if @rental.user == current_user
     @rental.destroy
+    end
     redirect_to rentals_path, notice: "Your rental request was deleted."
   end
 
@@ -52,6 +40,10 @@ class RentalsController < ApplicationController
   end
 
   def rental_duration_in_days
-    (Date.parse(params[:rental][:end_date]) - Date.parse(params[:rental][:start_date])).to_i + 1
+    # get the start and end date from user
+    start_date = params[:rental][:start_date].to_date
+    end_date = params[:rental][:end_date].to_date
+    # subtract to get number of days
+    (end_date - start_date).to_i + 1
   end
 end
