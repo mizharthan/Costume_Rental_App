@@ -2,6 +2,12 @@ class CostumesController < ApplicationController
 
   def index
     @costumes = Costume.all
+
+    if params[:query].present?
+      @costumes = Costume.where("LOWER(name) LIKE", "%#{params[:query].downcase}%")
+    else
+      @costumes = Costume.all
+    end
   end
 
   def show
