@@ -16,7 +16,7 @@ class RentalsController < ApplicationController
     @rental.user = current_user
     @rental.costume = @costume
     @rental.status = "not_confirmed"
-    @rental.price = @costume.price_per_day * rental_days
+    @rental.price = @costume.price_per_day * rental_duration
 
     if @rental.save
       redirect_to rentals_path, notice: "Your rental request has been sent!"
@@ -39,11 +39,15 @@ class RentalsController < ApplicationController
     params.require(:rental).permit(:start_date, :end_date)
   end
 
-  def rental_duration_in_days
-    # get the start and end date from user
-    start_date = params[:rental][:start_date].to_date
-    end_date = params[:rental][:end_date].to_date
-    # subtract to get number of days
+  def rental_duration
+    start_param = params.dig(:rental, :start_date)
+    end_param = params.dig(:rental, :end_date)
+
+    return 0 if start_param.blank? || end_param.blank?
+
+    start_date = start_param.to_date
+    end_date = end_param.to_date
+
     (end_date - start_date).to_i + 1
   end
 end
