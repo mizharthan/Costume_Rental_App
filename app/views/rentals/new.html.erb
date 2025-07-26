@@ -1,8 +1,12 @@
 <h1>Request Form to Rent "<%= @costume.name %>"</h1>
 
-<%= simple_form_for(@rental, html: { class: "rental-form" }) do |f| %>
-  <%= f.association :costume %>
-  <%= f.input :start_date, as: :date, label: "Start Date" %>
-  <%= f.input :end_date, as: :date, label: "End Date" %>
+<p>Price per day: <%= @costume.price_per_day %></p>
+
+<%= simple_form_for [@costume, @rental] do |f| %>
+  <div class = "form-group">
+    <%= f.input :start_date, as: :date, label: "Start Date" %>
+    <%= f.input :end_date, as: :date, label: "End Date" %>
+  </div>
+
   <%= f.button :submit, "Send Rental Request", class: "btn btn-primary" %>
 <% end %>
