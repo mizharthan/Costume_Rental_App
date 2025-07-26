@@ -1,19 +1,47 @@
-<h1>My Rental Requests</h1>
+<div class="container px-3 px-md-5">
+  <h1 class="mb-4">My Rental Requests</h1>
 
-<% if @rentals.any? %>
-  <% @rentals.each do |rental| %>
-    <div class="rental-card">
+  <% if @rentals.any? %>
+    <% @rentals.each do |rental| %>
       <% days = (rental.end_date - rental.start_date).to_i %>
       <% total_price = days * rental.costume.price_per_day %>
 
-      <h2><%= rental.costume.name %></h2>
-      <p>From: <%= rental.start_date.strftime('%Y-%m-%d') %>
-        To: <%= rental.end_date.strftime('%Y-%m-%d') %></p>
-      <p>Total: ¥<%= total_price %> for <%= days %> day<%= 's' if days > 1 %></p>
-      <p>Status: <%= rental.status.capitalize %></p>
-    </div>
-    <hr>
+      <div class="card mb-4 shadow-sm border-0">
+        <div class="row g-0 align-items-center">
+          <!-- Left: Details -->
+          <div class="col-md-8 p-4">
+            <h4 class="card-title mb-2"><%= rental.costume.name %></h4>
+            <p class="mb-1">
+              <strong>Rental Period:</strong>
+              <%= rental.start_date.strftime('%Y-%m-%d') %> – <%= rental.end_date.strftime('%Y-%m-%d') %>
+            </p>
+            <p class="mb-1">
+              <strong>Total:</strong> ¥<%= total_price %> for <%= days %> day<%= 's' if days > 1 %>
+            </p>
+            <p class="mb-0">
+              <strong>Status:</strong> <%= rental.status.capitalize %>
+            </p>
+          </div>
+
+          <!-- Right: Image -->
+          <div class="col-md-4 text-center p-3">
+            <% if rental.costume.photo.attached? %>
+              <%= cl_image_tag rental.costume.photo.key,
+                    height: 180,
+                    width: 280,
+                    crop: :fill,
+                    class: "img-fluid rounded",
+                    alt: rental.costume.name %>
+            <% else %>
+              <%= image_tag "https://via.placeholder.com/280x180?text=No+Image",
+                    class: "img-fluid rounded",
+                    alt: "No image available" %>
+            <% end %>
+          </div>
+        </div>
+      </div>
+    <% end %>
+  <% else %>
+    <p class="text-muted">You haven't made any rental requests yet.</p>
   <% end %>
-<% else %>
-  <p>You haven't made any rental requests yet.</p>
-<% end %>
+</div>
