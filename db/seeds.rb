@@ -44,7 +44,7 @@ def create_costume( name:, size:, description:, price:, category:, user:, image_
     )
 
     puts "Created: #{name}"
-  rescue OpenURI::HTTPError, SocketError => e
+  rescue OpenURI::HTTPError, SocketError, OpenSSL::SSL::SSLError => e
     puts "Image not reachable, skipping image for #{name} - #{e.message}"
     Costume.create!(
       name: name,
@@ -69,7 +69,7 @@ popular_costumes = [
   ["Ghost Sheet", 46, "Simple ghost costume with eye holes – classic and spooky.",15.0, "https://i.pinimg.com/736x/b7/71/51/b77151e894cfa63dc5e6799d0c5e3348.jpg"],
   ["Cat Onesie", 42, "Comfy black cat onesie with ears and tail.", 18.0, "https://static1.funidelia.com/532328-f6_big2/cat-onesie-costume-for-adults.jpg"],
   ["Cowboy Outfit", 54, "Wild west cowboy with hat, vest, and boots.", 27.0, "https://i.mmo.cm/is/image/mmoimg/mw-product-max/cowboy-vest-chaps-black--mw-117289-1.jpg"],
-  ["Santa Claus", 52, "Red jolly suit", 40.0, "https://santacollc.com/wp-content/uploads/2015/04/grid-halco-5691.jpg"]
+  ["Santa Claus", 52, "Red jolly suit", 40.0, "https://via.placeholder.com/400x300?text=Santa+Costume"]
 ]
 
 superhero_costumes = [
@@ -135,85 +135,85 @@ user8 = User.create!(first_name: "Hiro", last_name: "Fujimoto", email: "hiro@exa
 user9 = User.create!(first_name: "Isabelle", last_name: "Takahashi", email: "isabelle@example.com", password: "password")
 user10 = User.create!(first_name: "Jack", last_name: "Morita", email: "jack@example.com", password: "password")
 
-costumes = [
-  {
-    name: "Vampire Cape",
-    size: "48",
-    description: "Classic Dracula-style vampire costume with red-lined cape.",
-    price_per_day: 30.0,
-    user: user1,
-    image_url: "https://images.unsplash.com/photo-1603278005344-c3ec48b61e73"
-  },
-  {
-    name: "Witch Outfit",
-    size: "38",
-    description: "Black velvet witch costume with pointy hat.",
-    price_per_day: 25.0,
-    user: user2,
-    image_url: "https://images.unsplash.com/photo-1585412727330-e9e6e0f69cd9"
-  },
-  {
-    name: "Pirate Costume",
-    size: "52",
-    description: "Swashbuckling pirate with hat, eyepatch, and coat.",
-    price_per_day: 28.0,
-    user: user3,
-    image_url: "https://images.unsplash.com/photo-1603371591806-2181728df58e"
-  },
-  {
-    name: "Princess Dress",
-    size: "36",
-    description: "Pink royal princess gown with glittering skirt.",
-    price_per_day: 32.0,
-    user: user4,
-    image_url: "https://images.unsplash.com/photo-1573509983142-37d953c82dd6"
-  },
-  {
-    name: "Samurai Warrior",
-    size: "50",
-    description: "Authentic-looking samurai costume with armor pieces.",
-    price_per_day: 40.0,
-    user: user5,
-    image_url: "https://images.unsplash.com/photo-1603553032172-4d21d5199562"
-  },
-  {
-    name: "Clown Suit",
-    size: "44",
-    description: "Colorful clown outfit with oversized shoes and nose.",
-    price_per_day: 22.0,
-    user: user6,
-    image_url: "https://images.unsplash.com/photo-1577992835207-f8d15d1d1a3d"
-  },
-  {
-    name: "Ghost Sheet",
-    size: "46",
-    description: "Simple ghost costume with eye holes – classic and spooky.",
-    price_per_day: 15.0,
-    user: user7,
-    image_url: "https://images.unsplash.com/photo-1599140786660-42e5c6fae324"
-  },
-  {
-    name: "Harry Potter Robe",
-    size: "40",
-    description: "Hogwarts uniform with Gryffindor badge and wand.",
-    price_per_day: 35.0,
-    user: user8,
-    image_url: "https://images.unsplash.com/photo-1602332918895-129ebc0f899d"
-  },
-  {
-    name: "Cowboy Outfit",
-    size: "54",
-    description: "Wild west cowboy with hat, vest, and boots.",
-    price_per_day: 27.0,
-    user: user9,
-    image_url: "https://images.unsplash.com/photo-1596462502278-27b4a1c9adcc"
-  },
-  {
-    name: "Cat Onesie",
-    size: "42",
-    description: "Comfy black cat onesie with ears and tail.",
-    price_per_day: 18.0,
-    user: user10,
-    image_url: "https://images.unsplash.com/photo-1549924231-f129b911e442"
-  }
-]
+# costumes = [
+#   {
+#     name: "Vampire Cape",
+#     size: "48",
+#     description: "Classic Dracula-style vampire costume with red-lined cape.",
+#     price_per_day: 30.0,
+#     user: user1,
+#     image_url: "https://images.unsplash.com/photo-1603278005344-c3ec48b61e73"
+#   },
+#   {
+#     name: "Witch Outfit",
+#     size: "38",
+#     description: "Black velvet witch costume with pointy hat.",
+#     price_per_day: 25.0,
+#     user: user2,
+#     image_url: "https://images.unsplash.com/photo-1585412727330-e9e6e0f69cd9"
+#   },
+#   {
+#     name: "Pirate Costume",
+#     size: "52",
+#     description: "Swashbuckling pirate with hat, eyepatch, and coat.",
+#     price_per_day: 28.0,
+#     user: user3,
+#     image_url: "https://images.unsplash.com/photo-1603371591806-2181728df58e"
+#   },
+#   {
+#     name: "Princess Dress",
+#     size: "36",
+#     description: "Pink royal princess gown with glittering skirt.",
+#     price_per_day: 32.0,
+#     user: user4,
+#     image_url: "https://images.unsplash.com/photo-1573509983142-37d953c82dd6"
+#   },
+#   {
+#     name: "Samurai Warrior",
+#     size: "50",
+#     description: "Authentic-looking samurai costume with armor pieces.",
+#     price_per_day: 40.0,
+#     user: user5,
+#     image_url: "https://images.unsplash.com/photo-1603553032172-4d21d5199562"
+#   },
+#   {
+#     name: "Clown Suit",
+#     size: "44",
+#     description: "Colorful clown outfit with oversized shoes and nose.",
+#     price_per_day: 22.0,
+#     user: user6,
+#     image_url: "https://images.unsplash.com/photo-1577992835207-f8d15d1d1a3d"
+#   },
+#   {
+#     name: "Ghost Sheet",
+#     size: "46",
+#     description: "Simple ghost costume with eye holes – classic and spooky.",
+#     price_per_day: 15.0,
+#     user: user7,
+#     image_url: "https://images.unsplash.com/photo-1599140786660-42e5c6fae324"
+#   },
+#   {
+#     name: "Harry Potter Robe",
+#     size: "40",
+#     description: "Hogwarts uniform with Gryffindor badge and wand.",
+#     price_per_day: 35.0,
+#     user: user8,
+#     image_url: "https://images.unsplash.com/photo-1602332918895-129ebc0f899d"
+#   },
+#   {
+#     name: "Cowboy Outfit",
+#     size: "54",
+#     description: "Wild west cowboy with hat, vest, and boots.",
+#     price_per_day: 27.0,
+#     user: user9,
+#     image_url: "https://images.unsplash.com/photo-1596462502278-27b4a1c9adcc"
+#   },
+#   {
+#     name: "Cat Onesie",
+#     size: "42",
+#     description: "Comfy black cat onesie with ears and tail.",
+#     price_per_day: 18.0,
+#     user: user10,
+#     image_url: "https://images.unsplash.com/photo-1549924231-f129b911e442"
+#   }
+# ]

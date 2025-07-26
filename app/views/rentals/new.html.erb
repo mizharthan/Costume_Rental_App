@@ -1,12 +1,18 @@
-<h1>Request Form to Rent "<%= @costume.name %>"</h1>
+<h1>Costume Rental Request Form </h1>
 
-<p>Price per day: <%= @costume.price_per_day %></p>
+<% if @costume.photo.attached? %>
+  <%= image_tag @costume.photo, class: "img fluid mb-3", style: "max-height: 300px;" %>
+<% end %>
+
+<h2><%= @costume.name %></h2>
 
 <%= simple_form_for [@costume, @rental] do |f| %>
   <div class = "form-group">
     <%= f.input :start_date, as: :date, label: "Start Date" %>
     <%= f.input :end_date, as: :date, label: "End Date" %>
   </div>
+
+  <p>Price per day: €<%= @costume.price_per_day %></p>
 
   <%= f.button :submit, "Send Rental Request", class: "btn btn-primary" %>
 <% end %>
