@@ -50,8 +50,8 @@ ActiveRecord::Schema[7.1].define(version: 2025_07_22_130219) do
     t.bigint "user_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.string "category"
     t.string "image"
+    t.string "category"
     t.index ["user_id"], name: "index_costumes_on_user_id"
   end
 
