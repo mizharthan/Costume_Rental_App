@@ -23,7 +23,7 @@
     const startDateInput = document.getElementById("start-date");
     const endDateInput = document.getElementById("end-date");
     const totalPriceSpan = document.getElementById("total-price");
-    const pricePerDay = <%= @costume.price_per_day || 0 %>;
+    const pricePerDay = <%= (@costume.price_per_day || 0).to_f.to_json.html_safe %>;
 
     function calculateTotal() {
       const startDate = new Date(startDateInput.value);
