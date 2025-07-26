@@ -1,5 +1,5 @@
 Rails.application.routes.draw do
-  get 'costumes/show'
+  get 'costumes/show' # Temporary hardcoded route for testing costume show page without an ID
   devise_for :users
   root to: "pages#home"
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
@@ -12,6 +12,10 @@ Rails.application.routes.draw do
   # root "posts#index"
   get "pages/home", to: "pages#home"
   get "search", to: "pages#search"
-  
-  resources :costumes
+
+  resources :costumes do
+    resources :rentals, only: [:new, :create]
+  end
+
+  resources :rentals, only: [:index, :update, :destroy]
 end

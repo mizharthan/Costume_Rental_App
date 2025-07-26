@@ -1,4 +1,5 @@
 class CostumesController < ApplicationController
+  before_action :authenticate_user!
 
   def index
     @costumes = Costume.all
@@ -20,9 +21,10 @@ class CostumesController < ApplicationController
 
   def create
     @costume = Costume.new(costume_params)
+    @costume.user = current_user
 
     if @costume.save
-      redirect_to @costume, notice: 'Costume was successfully created.'
+      redirect_to @costume, notice: "Costume was successfully created."
     else
       render :new, status: :unprocessable_entity
     end
@@ -31,6 +33,6 @@ class CostumesController < ApplicationController
   private
 
   def costume_params
-    params.require(:costume).permit(:name, :photo)
+    params.require(:costume).permit(:name, :size, :description, :price_per_day, :image)
   end
 end
