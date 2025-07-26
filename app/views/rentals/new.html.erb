@@ -1,22 +1,28 @@
-<h1>Costume Rental Request Form </h1>
+<div class="container py-4" style="max-width: 600px;">
+  <div class="text-center">
 
-<% if @costume.photo.attached? %>
-  <%= image_tag @costume.photo, class: "img-fluid mb-3", style: "max-height: 300px;" %>
-<% end %>
+    <h1 class="mb-4">Costume Rental Request Form</h1>
 
-<h2><%= @costume.name %></h2>
+    <% if @costume.photo.attached? %>
+      <%= image_tag @costume.photo, class: "img-fluid mb-3", style: "max-height: 300px;" %>
+    <% end %>
 
-<%= simple_form_for [@costume, @rental] do |f| %>
-  <div class = "form-group">
-    <%= f.input :start_date, as: :date, label: "Start Date", input_html: { id: "start-date" } %>
-    <%= f.input :end_date, as: :date, label: "End Date", input_html: { id: "end-date" }%>
+    <h2 class="mb-4"><%= @costume.name %></h2>
+
+    <%= simple_form_for [@costume, @rental] do |f| %>
+      <div class="form-group mb-3">
+        <%= f.input :start_date, as: :date, label: "Start Date", input_html: { id: "start-date", class: "form-control" } %>
+        <%= f.input :end_date, as: :date, label: "End Date", input_html: { id: "end-date", class: "form-control" } %>
+      </div>
+
+      <p>Price per day: €<%= '%.2f' % @costume.price_per_day %></p>
+      <p>Total price: €<span id="total-price">0.00</span></p>
+
+      <%= f.button :submit, "Send Rental Request", class: "btn btn-primary mt-3" %>
+    <% end %>
+
   </div>
-
-  <p>Price per day: €<%= '%.2f' % @costume.price_per_day %></p>
-  <p>Total price: €<span id="total-price"></span></p>
-
-  <%= f.button :submit, "Send Rental Request", class: "btn btn-primary" %>
-<% end %>
+</div>
 
 <%= javascript_tag do %>
   document.addEventListener("turbo:load", function() {
@@ -37,7 +43,6 @@
       }
     }
 
-    // Bind on multiple input events for reliability
     ["change", "input"].forEach(event => {
       startDateInput.addEventListener(event, calculateTotal);
       endDateInput.addEventListener(event, calculateTotal);
