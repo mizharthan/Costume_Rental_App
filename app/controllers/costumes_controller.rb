@@ -1,6 +1,14 @@
 class CostumesController < ApplicationController
   before_action :authenticate_user!
 
+  def index
+    @costumes = Costume.all
+  end
+
+  def show
+    @costume = Costume.find(params[:id])
+  end
+
   def new
     @costume = Costume.new
   end
@@ -19,6 +27,6 @@ class CostumesController < ApplicationController
   private
 
   def costume_params
-    params.require(:costume).permit(:size, :name, :description, :price_per_day, :image)
+    params.require(:costume).permit(:name, :size, :description, :price_per_day, :image)
   end
 end
