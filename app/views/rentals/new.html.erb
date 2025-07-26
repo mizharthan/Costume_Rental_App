@@ -1,18 +1,41 @@
 <h1>Costume Rental Request Form </h1>
 
 <% if @costume.photo.attached? %>
-  <%= image_tag @costume.photo, class: "img fluid mb-3", style: "max-height: 300px;" %>
+  <%= image_tag @costume.photo, class: "img-fluid mb-3", style: "max-height: 300px;" %>
 <% end %>
 
 <h2><%= @costume.name %></h2>
 
 <%= simple_form_for [@costume, @rental] do |f| %>
   <div class = "form-group">
-    <%= f.input :start_date, as: :date, label: "Start Date" %>
-    <%= f.input :end_date, as: :date, label: "End Date" %>
+    <%= f.input :start_date, as: :date, label: "Start Date", input_html: { id: "start-date" } %>
+    <%= f.input :end_date, as: :date, label: "End Date", input_html: { id: "end-date" }%>
   </div>
 
   <p>Price per day: €<%= @costume.price_per_day %></p>
+  <p>Total price: €<span id="total-price">0</span></p>
 
   <%= f.button :submit, "Send Rental Request", class: "btn btn-primary" %>
+<% end %>
+
+<%= javascript_tag do %>
+  const startDateInput = document.getElementById("start-date");
+  const endDateInput = document.getElementById("end-date");
+  const totalPriceSpan = document.getElementById("total-price");
+  const pricePerDay = <%= @costume.price_per_day %>;
+
+  function calculateTotal() {
+    const startDate = new Date(startDateInput.value);
+    const endDate = new Date(endDateInput.value);
+
+    if (!isNaN(startDate) && !isNaN(endDate) && endDate >= startDate) {
+      const days = Math.floor((endDate - startDate) / (1000 * 60 * 60 * 24)) + 1;
+      totalPriceSpan.textContent = days * pricePerDay;
+    } else {
+      totalPriceSpan.textContent = 0;
+    }
+  }
+
+  startDateInput.addEventListener("change", calculateTotal);
+  endDateInput.addEventListener("change", calculateTotal);
 <% end %>
