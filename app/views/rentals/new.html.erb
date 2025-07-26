@@ -13,29 +13,36 @@
   </div>
 
   <p>Price per day: €<%= @costume.price_per_day %></p>
-  <p>Total price: €<span id="total-price">0</span></p>
+  <p>Total price: €<span id="total-price"></span></p>
 
   <%= f.button :submit, "Send Rental Request", class: "btn btn-primary" %>
 <% end %>
 
 <%= javascript_tag do %>
-  const startDateInput = document.getElementById("start-date");
-  const endDateInput = document.getElementById("end-date");
-  const totalPriceSpan = document.getElementById("total-price");
-  const pricePerDay = <%= @costume.price_per_day %>;
+  document.addEventListener("turbo:load", function() {
+    const startDateInput = document.getElementById("start-date");
+    const endDateInput = document.getElementById("end-date");
+    const totalPriceSpan = document.getElementById("total-price");
+    const pricePerDay = <%= @costume.price_per_day || 0 %>;
 
-  function calculateTotal() {
-    const startDate = new Date(startDateInput.value);
-    const endDate = new Date(endDateInput.value);
+    function calculateTotal() {
+      const startDate = new Date(startDateInput.value);
+      const endDate = new Date(endDateInput.value);
 
-    if (!isNaN(startDate) && !isNaN(endDate) && endDate >= startDate) {
-      const days = Math.floor((endDate - startDate) / (1000 * 60 * 60 * 24)) + 1;
-      totalPriceSpan.textContent = days * pricePerDay;
-    } else {
-      totalPriceSpan.textContent = 0;
+      if (!isNaN(startDate) && !isNaN(endDate) && endDate >= startDate) {
+        const days = Math.floor((endDate - startDate) / (1000 * 60 * 60 * 24)) + 1;
+        totalPriceSpan.textContent = (days * pricePerDay).toFixed(2);
+      } else {
+        totalPriceSpan.textContent = "0.00";
+      }
     }
-  }
 
-  startDateInput.addEventListener("change", calculateTotal);
-  endDateInput.addEventListener("change", calculateTotal);
+    // Bind on multiple input events for reliability
+    ["change", "input"].forEach(event => {
+      startDateInput.addEventListener(event, calculateTotal);
+      endDateInput.addEventListener(event, calculateTotal);
+    });
+
+    calculateTotal(); // Initial run
+  });
 <% end %>
