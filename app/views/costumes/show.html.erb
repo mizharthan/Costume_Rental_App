@@ -1,11 +1,13 @@
-<h1><%= @costume.name %></h1>
+<div class = "container d-flex flex-column align-items-center text-center my-5">
+  <h1><%= @costume.name %></h1>
 
-<% if @costume.photo.attached? %>
-  <%= image_tag @costume.photo, class: "img-fluid mb-3", style: "max-height: 300px;" %>
-<% end %>
+  <% if @costume.photo.attached? %>
+    <%= image_tag @costume.photo, class: "img-fluid rounded shadow-sm mb-4", style: "max-height: 400px;" %>
+  <% end %>
 
-<p><%= @costume.description %></p>
-<p>Size: <%= @costume.size %></p>
-<p><strong>Price per day: €<%= @costume.price_per_day %></strong></p>
+  <p><%= @costume.description %></p>
+  <p>Size: <%= @costume.size %></p>
+  <p><strong>Price per day: €<%= @costume.price_per_day %></strong></p>
 
-<%= link_to "Create a Rental Request", new_costume_rental_path(@costume), class: "btn btn-primary" %>
+  <%= link_to "Create a Rental Request", new_costume_rental_path(@costume), class: "btn btn-primary btn-lg" %>
+</div>
