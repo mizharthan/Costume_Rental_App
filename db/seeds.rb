@@ -24,7 +24,7 @@ users = []
 end
 
 
-def create_costume( name:, size:, description:, price:, category:, user:, image_url: )
+def create_costume( name:, size:, description:, price:, category:, user:, image_url:, wearers: [] )
   begin
     downloaded_image = URI.open(image_url)
 
@@ -37,7 +37,10 @@ def create_costume( name:, size:, description:, price:, category:, user:, image_
       user: user
     )
 
-    costume.photo.attach(
+    costume.wearer_list.add(wearers)
+    costume.save!
+
+    costume.photos.attach(
       io: downloaded_image,
       filename: "#{name.parameterize}.jpg",
       content_type: downloaded_image.content_type || "image/jpeg"
@@ -46,7 +49,7 @@ def create_costume( name:, size:, description:, price:, category:, user:, image_
     puts "Created: #{name}"
   rescue OpenURI::HTTPError, SocketError, OpenSSL::SSL::SSLError => e
     puts "Image not reachable, skipping image for #{name} - #{e.message}"
-    Costume.create!(
+    costume = Costume.create!(
       name: name,
       size: size,
       description: description,
@@ -54,6 +57,8 @@ def create_costume( name:, size:, description:, price:, category:, user:, image_
       category: category,
       user: user
     )
+    costume.wearer_list.add(wearers)
+    costume.save!
   end
 end
 
@@ -110,6 +115,9 @@ anime_costumes = [
 
   user = users[i % users.size]
 
+  wearers = ["Adult", "Woman", "Man", "Kid", "Boy", "Girl"]
+
+
 create_costume(
   name: name,
   size: size,
@@ -117,7 +125,8 @@ create_costume(
   price: price,
   category: category,
   user: users[i % users.size],
-  image_url: url
+  image_url: url,
+  wearers: wearers
 )
 end
 
