@@ -1,7 +1,15 @@
 <div class="container my-5">
-  <div class="row mb-5">
+  <div class="row mb-5" data-controller="image-switcher">
     <!-- Left: Thumbnails -->
     <div class="col-md-2 d-flex flex-column align-items-center gap-2">
+      <% if @costume.photo.attached? %>
+        <!-- Cover photo as thumbnail -->
+        <%= image_tag url_for(@costume.photo),
+              data: { image_switcher_target: "thumbnail", action: "click->image-switcher#switch" },
+              class: "img-fluid rounded border",
+              style: "height: 80px; width: auto; cursor: pointer;" %>
+      <% end %>
+
       <% @costume.photos.each do |photo| %>
         <%= image_tag url_for(photo),
               data: { image_switcher_target: "thumbnail", action: "click->image-switcher#switch" },
@@ -9,7 +17,7 @@
               style: "height: 80px; width: auto; cursor: pointer;" %>
       <% end %>
 
-      <!-- Temp Pikachu -->
+      <!-- Optional: Hardcoded Pikachu -->
       <%= image_tag "https://assets.pokemon.com/assets/cms2/img/pokedex/full/025.png",
             data: { image_switcher_target: "thumbnail", action: "click->image-switcher#switch" },
             class: "img-fluid rounded border",
@@ -17,7 +25,7 @@
     </div>
 
     <!-- Center: Main Image -->
-    <div class="col-md-5 text-center" data-controller="image-switcher">
+    <div class="col-md-5 text-center">
       <%= image_tag url_for(@costume.photo),
             data: { image_switcher_target: "main" },
             id: "main-image",
