@@ -1,11 +1,11 @@
 <div class="container px-3 px-md-5 my-5">
 
 <div class="d-inline-flex mb-4">
-  <%= link_to "My Requests", rentals_path, class: "btn btn-ghost btn-left-rounded active" %>
-  <%= link_to "Requests for My Costumes", owner_requests_rentals_path, class: "btn btn-ghost btn-right-rounded" %>
+  <%= link_to "My Requests", rentals_path, class: "btn btn-ghost btn-left-rounded" %>
+  <%= link_to "Requests for My Costumes", owner_requests_rentals_path, class: "btn btn-ghost btn-right-rounded active" %>
 </div>
 
-  <h1 class="mb-4">My Rental Requests</h1>
+  <h1 class="mb-4">Rental Requests for My Costumes</h1>
 
   <% if @rentals.any? %>
     <% @rentals.each do |rental| %>
@@ -27,6 +27,10 @@
             <p class="mb-0">
               <strong>Status:</strong> <%= rental.status.capitalize %>
             </p>
+            <% if rental.status == "not_confirmed" %>
+              <%= link_to "Accept", rental_path(rental, status: "Accepted"), method: :patch, class: "btn btn-success btn-sm me-2" %>
+              <%= link_to "Decline", rental_path(rental, status: "Declined"), method: :patch, class: "btn btn-danger btn-sm" %>
+            <% end %>
           </div>
 
           <!-- Right: Image -->
@@ -48,6 +52,6 @@
       </div>
     <% end %>
   <% else %>
-    <p class="text-muted">You haven't made any rental requests yet.</p>
+    <p class="text-muted">No rental requests for your costumes have been made yet.</p>
   <% end %>
 </div>
