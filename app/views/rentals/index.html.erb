@@ -2,7 +2,7 @@
   <h1 class="mb-4">My Rental Requests</h1>
 
   <% if @rentals.any? %>
-    <% @rentals.each do |rental| %>
+    <% @rentals.reverse.each do |rental| %>
       <% days = (rental.end_date - rental.start_date).to_i %>
       <% total_price = days * rental.costume.price_per_day %>
 
@@ -16,7 +16,7 @@
               <%= rental.start_date.strftime('%Y-%m-%d') %> – <%= rental.end_date.strftime('%Y-%m-%d') %>
             </p>
             <p class="mb-1">
-              <strong>Total:</strong> ¥<%= total_price %> for <%= days %> day<%= 's' if days > 1 %>
+              <strong>Total:</strong> €<%= total_price %> for <%= days %> day<%= 's' if days > 1 %>
             </p>
             <p class="mb-0">
               <strong>Status:</strong> <%= rental.status.capitalize %>
