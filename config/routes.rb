@@ -17,5 +17,9 @@ Rails.application.routes.draw do
     resources :rentals, only: [:new, :create]
   end
 
-  resources :rentals, only: [:index, :update, :destroy]
+  resources :rentals, only: [:index, :update, :destroy] do
+    collection do
+      get :owner_requests
+    end
+  end
 end

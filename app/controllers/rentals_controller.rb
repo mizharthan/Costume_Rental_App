@@ -2,7 +2,16 @@ class RentalsController < ApplicationController
   before_action :authenticate_user!
 
   def index
+    # current user rental requests they made
     @rentals = current_user.rentals.includes(:costume)
+  end
+
+  def owner_requests
+    # requests for the costumes the current user owns
+    @rentals = Rental
+    .joins(:costume)
+    .where(costumes: { user_id: current_user.id })
+    .order(created_at: :desc)
   end
 
   def new
