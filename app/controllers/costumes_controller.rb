@@ -30,6 +30,12 @@ class CostumesController < ApplicationController
     end
   end
 
+  def destroy
+    @costume = Costume.find(params[:id])
+    @costume.destroy
+    redirect_to root_path, notice: "Costume was successfully deleted."
+  end
+
   private
 
   def costume_params

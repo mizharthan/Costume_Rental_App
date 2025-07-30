@@ -10,4 +10,10 @@
 <p><strong>Price per day: €<%= '%.2f' % @costume.price_per_day %></strong></p>
 
   <%= link_to "Create a Rental Request", new_costume_rental_path(@costume), class: "btn btn-primary btn-lg" %>
+
+  <% if current_user == @costume.user %>
+    <%= link_to "Delete Costume", costume_path(@costume), method: :delete,
+        data: { confirm: "Are you sure you want to delete this costume?" },
+        class: "btn btn-danger" %>
+  <% end %>
 </div>
