@@ -15,6 +15,10 @@ class CostumesController < ApplicationController
     @costume = Costume.find(params[:id])
   end
 
+  def my_listings
+    @costumes = current_user.costumes
+  end
+
   def new
     @costume = Costume.new
   end
