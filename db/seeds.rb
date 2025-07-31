@@ -24,9 +24,11 @@ users = []
 end
 
 
-def create_costume( name:, size:, description:, price:, category:, user:, image_url: )
+def create_costume( name:, size:, description:, price:, category:, user:, image_url:, wearers: [] )
+  wearer_string = wearers.join(", ")
+
   begin
-    downloaded_image = URI.open(image_url)
+    downloaded_image = URI.open( image_url )
 
     costume = Costume.create!(
       name: name,
@@ -34,7 +36,9 @@ def create_costume( name:, size:, description:, price:, category:, user:, image_
       description: description,
       price_per_day: price,
       category: category,
-      user: user
+      user: user,
+      wearer_list: wearers,
+      image: image_url
     )
 
     costume.photos.attach(
@@ -46,13 +50,15 @@ def create_costume( name:, size:, description:, price:, category:, user:, image_
     puts "Created: #{name}"
   rescue OpenURI::HTTPError, SocketError, OpenSSL::SSL::SSLError => e
     puts "Image not reachable, skipping image for #{name} - #{e.message}"
-    Costume.create!(
+    costume = Costume.create!(
       name: name,
       size: size,
       description: description,
       price_per_day: price,
       category: category,
-      user: user
+      user: user,
+      wearer_list: wearers,
+      image: image_url
     )
   end
 end
@@ -60,46 +66,46 @@ end
 puts "Creating costumes..."
 
 popular_costumes = [
-  ["Harry Potter Robe", 40, "Hogwarts uniform with Gryffindor badge and wand.", 35.0, "https://s7.orientaltrading.com/is/image/OrientalTrading/14277527?$PDP_VIEWER_IMAGE$"],
-  ["Vampire Cape", 48, "Classic Dracula-style vampire costume with red-lined cape.", 30.0, "https://s7.orientaltrading.com/is/image/OrientalTrading/14401132?$PDP_VIEWER_IMAGE$"],
-  ["Witch Outfit", 38, "Black velvet witch costume with pointy hat.", 25.0, "https://i.pinimg.com/736x/e9/08/c1/e908c13f3b3d1becf48e69b8e88dd39a.jpg"],
-  ["Princess Dress", 36, "Pink royal princess gown with glittering skirt.", 32.0, "https://www.victoriandancer.com/images/Disney-Dresses/DC-23/img.jpg"],
-  ["Pirate Costume", 52, "Swashbuckling pirate with hat, eyepatch, and coat.", 28.0, "https://i0.wp.com/fabrickated.com/wp-content/uploads/2014/05/piratesof-caribean.jpg"],
-  ["Clown Suit", 44, "Colorful clown outfit with oversized shoes and nose.", 22.0, "https://i.pinimg.com/736x/a6/fa/3e/a6fa3eff799696732f65fb766d0f1153.jpg"],
-  ["Ghost Sheet", 46, "Simple ghost costume with eye holes – classic and spooky.",15.0, "https://i.pinimg.com/736x/b7/71/51/b77151e894cfa63dc5e6799d0c5e3348.jpg"],
-  ["Cat Onesie", 42, "Comfy black cat onesie with ears and tail.", 18.0, "https://static1.funidelia.com/532328-f6_big2/cat-onesie-costume-for-adults.jpg"],
-  ["Cowboy Outfit", 54, "Wild west cowboy with hat, vest, and boots.", 27.0, "https://i.mmo.cm/is/image/mmoimg/mw-product-max/cowboy-vest-chaps-black--mw-117289-1.jpg"],
-  ["Santa Claus", 52, "Red jolly suit", 40.0, "https://via.placeholder.com/400x300?text=Santa+Costume"]
+  ["Harry Potter Robe", 40, "Hogwarts uniform with Gryffindor badge and wand.", 35.0, "https://s7.orientaltrading.com/is/image/OrientalTrading/14277527?$PDP_VIEWER_IMAGE$", ["Man", "Boy"]],
+  ["Vampire Cape", 48, "Classic Dracula-style vampire costume with red-lined cape.", 30.0, "https://s7.orientaltrading.com/is/image/OrientalTrading/14401132?$PDP_VIEWER_IMAGE$", ["Man", "Boy"]],
+  ["Witch Outfit", 38, "Black velvet witch costume with pointy hat.", 25.0, "https://i.pinimg.com/736x/e9/08/c1/e908c13f3b3d1becf48e69b8e88dd39a.jpg", ["Woman", "Girl"]],
+  ["Princess Dress", 36, "Pink royal princess gown with glittering skirt.", 32.0, "https://www.victoriandancer.com/images/Disney-Dresses/DC-23/img.jpg", ["Woman", "Girl"]],
+  ["Pirate Costume", 52, "Swashbuckling pirate with hat, eyepatch, and coat.", 28.0, "https://i0.wp.com/fabrickated.com/wp-content/uploads/2014/05/piratesof-caribean.jpg",  ["Man", "Boy"]],
+  ["Clown Suit", 44, "Colorful clown outfit with oversized shoes and nose.", 22.0, "https://i.pinimg.com/736x/a6/fa/3e/a6fa3eff799696732f65fb766d0f1153.jpg",  ["Man", "Boy"]],
+  ["Ghost Sheet", 46, "Simple ghost costume with eye holes – classic and spooky.",15.0, "https://i.pinimg.com/736x/b7/71/51/b77151e894cfa63dc5e6799d0c5e3348.jpg",  ["Man", "Boy"]],
+  ["Cat Onesie", 42, "Comfy black cat onesie with ears and tail.", 18.0, "https://static1.funidelia.com/532328-f6_big2/cat-onesie-costume-for-adults.jpg",  ["Woman", "Girl"]],
+  ["Cowboy Outfit", 54, "Wild west cowboy with hat, vest, and boots.", 27.0, "https://i.mmo.cm/is/image/mmoimg/mw-product-max/cowboy-vest-chaps-black--mw-117289-1.jpg",  ["Man", "Boy"]],
+  ["Santa Claus", 52, "Red jolly suit", 40.0, "https://www.costumesforsanta.com/images/com_hikashop/upload/regal-red-velvet-santa-suit.jpg",  ["Man", "Boy"]]
 ]
 
 superhero_costumes = [
-  ["Samurai Warrior", 50, "Authentic-looking samurai costume with armor pieces.", 40.0, "https://dallasvintageshop.com/wp-content/uploads/2018/07/Photo-Apr-16-1-15-37-PM.jpg" ],
-  ["Batman", 48, "Dark night costume", 35.0, "https://www.by-the-sword.com/images/product/large/60-217491.jpg" ],
-  ["Wonder Woman", 36, "Amazon warrior outfit", 32.0, "https://static1.funidelia.com/475719-f6_big2/wonder-woman-costume.jpg" ],
-  ["Spider Man", 38, "Web-slinger suit", 30.0, "https://www.previewsworld.com/SiteImage/MainImage/STK472074" ],
-  ["Hulk", 54, "Green muscle suit", 28.0, "https://i.pinimg.com/736x/7b/9a/1a/7b9a1a57dd6ad78f23b3be10a1698171.jpg" ],
-  ["Iron Man", 44, "Armored red and gold suit", 40.0, "https://joetoyss.com/cdn/shop/files/20231018152212_1200x.jpg?v=1697614106" ],
-  ["Cat Woman", 36, "Sleek and seductive", 29.0, "https://cdn11.bigcommerce.com/s-7k7lbbk7jr/images/stencil/1280x1280/products/23552/34345/media__40562.1657317351.jpg?c=1" ],
-  ["Captain America", 46, "Stars and stripers costume", 34.0, "https://i.pinimg.com/736x/5d/3b/a0/5d3ba046ff5bdc94db6549ce1aecfb87.jpg" ],
-  ["Superman", 50, "Blue and red superhero suit", 33.0, "https://images.fun.com/media/159/superman/adult-superman-costume.jpg" ],
-  ["Thor", 48, "God and thunder outfit", 37.0, "https://images.fun.com/media/159/thor/thor-costume-adult.png" ]
+  ["Samurai Warrior", 50, "Authentic-looking samurai costume with armor pieces.", 40.0, "https://dallasvintageshop.com/wp-content/uploads/2018/07/Photo-Apr-16-1-15-37-PM.jpg",  ["Man", "Boy"] ],
+  ["Batman", 48, "Dark night costume", 35.0, "https://www.by-the-sword.com/images/product/large/60-217491.jpg",  ["Man", "Boy"] ],
+  ["Wonder Woman", 36, "Amazon warrior outfit", 32.0, "https://static1.funidelia.com/475719-f6_big2/wonder-woman-costume.jpg",  ["Woman", "Girl"] ],
+  ["Spider Man", 38, "Web-slinger suit", 30.0, "https://www.previewsworld.com/SiteImage/MainImage/STK472074",  ["Man", "Boy"] ],
+  ["Hulk", 54, "Green muscle suit", 28.0, "https://i.pinimg.com/736x/7b/9a/1a/7b9a1a57dd6ad78f23b3be10a1698171.jpg",  ["Man", "Boy"] ],
+  ["Iron Man", 44, "Armored red and gold suit", 40.0, "https://joetoyss.com/cdn/shop/files/20231018152212_1200x.jpg?v=1697614106",  ["Man", "Boy"] ],
+  ["Cat Woman", 36, "Sleek and seductive", 29.0, "https://cdn11.bigcommerce.com/s-7k7lbbk7jr/images/stencil/1280x1280/products/23552/34345/media__40562.1657317351.jpg?c=1",  ["Woman", "Girl"] ],
+  ["Captain America", 46, "Stars and stripers costume", 34.0, "https://i.pinimg.com/736x/5d/3b/a0/5d3ba046ff5bdc94db6549ce1aecfb87.jpg",  ["Man", "Boy"] ],
+  ["Superman", 50, "Blue and red superhero suit", 33.0, "https://images.fun.com/media/159/superman/adult-superman-costume.jpg",  ["Man", "Boy"] ],
+  ["Thor", 48, "God and thunder outfit", 37.0, "https://images.fun.com/media/159/thor/thor-costume-adult.png", ["Man", "Boy"] ]
 ]
 
 anime_costumes = [
-  ["Goku", 42, "Authentic Dragonball  Z Goku costume", 40.0, "https://www.gcosplay.com/cdn/shop/products/1_3320ca12-8582-4b38-9156-fe55f8886f74.jpg?v=1678257749" ],
-  ["Levi", 38, "Survey corps uniform", 35.0, "https://media.cosmanles.com/media/catalog/product/cache/1/image/9df78eab33525d08d6e5fb8d27136e95/3/7/3704-_2_.jpg" ],
-  ["Naruto", 40, "Classic orange ninja jumpsuit", 38.0, "https://elka.ua/image/cache/catalog/Partners/masochka/man/mk-vk-1764-1-1000x1400.jpg" ],
-  ["Nezuko", 36, "Demon Slayer's Nezuko kamado kimono style", 37.0, "https://www.ubuy.co.it/productimg/?image=aHR0cHM6Ly9tLm1lZGlhLWFtYXpvbi5jb20vaW1hZ2VzL0kvNTFqN0RpYUFTRkwuX0FDX1VMMTAwMF8uanBn.jpg" ],
-  ["Ichigo", 44, "Bleach's Ichigo Kurosaki shinigami ", 36.0, "https://cosplayware.s3.amazonaws.com/wp-content/uploads/2023/03/10101704/Anime-Bleach-Ichigo-Kurosaki-Coat-Pants-Dress-Cosplay-Costume-Halloween-Uniform-Death-cos-Kurosaki-Ai-Universal.jpg" ],
-  ["Deku", 42, "My Hero Academia's Izuku Midoriya hero", 39.0, "https://www.cosplayclan.com/cdn/shop/products/1_72311e68-0d57-4567-9e7b-a166f9ed02e3.jpg?v=1647248057" ],
-  ["Tanjiro", 40, "Demon Slayer's Tanjiro Kamado", 38.0, "https://images-na.ssl-images-amazon.com/images/I/61BTSRav7dL._UL500_.jpg" ],
-  ["Anya", 38, "Spy x Family's Anya fonger pink school dress", 33.0, "https://hobbymaniaz.com.au/cdn/shop/products/O1CN017oDgdx1EyrVu1NsQI__950890421-0-cib.jpg?v=1660217030" ],
-  ["Inuyasha", 42, "Inuyasha's iconic kimono style rob", 37.0, "https://wickedhalloweencostumes.com/cdn/shop/files/H8a28d925d88d41fb87f9aea97febe373j.jpg_720x720q50_1200x1200.webp?v=1700442802" ],
-  ["Sailor Moon", 40, "Classic Sailor Moon sailor fuku", 34.0, "https://aliceincosplayland.com/wp-content/uploads/2019/10/Super-Sailor-Moon-2.jpg" ]
+  ["Goku", 42, "Authentic Dragonball  Z Goku costume", 40.0, "https://www.gcosplay.com/cdn/shop/products/1_3320ca12-8582-4b38-9156-fe55f8886f74.jpg?v=1678257749",  ["Man", "Boy"] ],
+  ["Levi", 38, "Survey corps uniform", 35.0, "https://media.cosmanles.com/media/catalog/product/cache/1/image/9df78eab33525d08d6e5fb8d27136e95/3/7/3704-_2_.jpg",  ["Man", "Boy"] ],
+  ["Naruto", 40, "Classic orange ninja jumpsuit", 38.0, "https://elka.ua/image/cache/catalog/Partners/masochka/man/mk-vk-1764-1-1000x1400.jpg",  ["Man", "Boy"] ],
+  ["Nezuko", 36, "Demon Slayer's Nezuko kamado kimono style", 37.0, "https://www.ubuy.co.it/productimg/?image=aHR0cHM6Ly9tLm1lZGlhLWFtYXpvbi5jb20vaW1hZ2VzL0kvNTFqN0RpYUFTRkwuX0FDX1VMMTAwMF8uanBn.jpg",  ["Woman", "Girl"] ],
+  ["Ichigo", 44, "Bleach's Ichigo Kurosaki shinigami ", 36.0, "https://cosplayware.s3.amazonaws.com/wp-content/uploads/2023/03/10101704/Anime-Bleach-Ichigo-Kurosaki-Coat-Pants-Dress-Cosplay-Costume-Halloween-Uniform-Death-cos-Kurosaki-Ai-Universal.jpg",  ["Man", "Boy"] ],
+  ["Deku", 42, "My Hero Academia's Izuku Midoriya hero", 39.0, "https://www.cosplayclan.com/cdn/shop/products/1_72311e68-0d57-4567-9e7b-a166f9ed02e3.jpg?v=1647248057",  ["Man", "Boy"] ],
+  ["Tanjiro", 40, "Demon Slayer's Tanjiro Kamado", 38.0, "https://images-na.ssl-images-amazon.com/images/I/61BTSRav7dL._UL500_.jpg",  ["Man", "Boy"] ],
+  ["Anya", 38, "Spy x Family's Anya fonger pink school dress", 33.0, "https://hobbymaniaz.com.au/cdn/shop/products/O1CN017oDgdx1EyrVu1NsQI__950890421-0-cib.jpg?v=1660217030",  ["Woman", "Girl"] ],
+  ["Inuyasha", 42, "Inuyasha's iconic kimono style rob", 37.0, "https://wickedhalloweencostumes.com/cdn/shop/files/H8a28d925d88d41fb87f9aea97febe373j.jpg_720x720q50_1200x1200.webp?v=1700442802",  ["Man", "Boy"] ],
+  ["Sailor Moon", 40, "Classic Sailor Moon sailor fuku", 34.0, "https://aliceincosplayland.com/wp-content/uploads/2019/10/Super-Sailor-Moon-2.jpg",  ["Woman", "Girl"] ]
 
 ]
 
-(popular_costumes + superhero_costumes + anime_costumes).each_with_index do |(name, size, desc, price, url), i|
+(popular_costumes + superhero_costumes + anime_costumes).each_with_index do |(name, size, desc, price, url, wearers), i|
   category = if i < popular_costumes.size
     "Popular"
   elsif i < (popular_costumes.size + superhero_costumes.size)
@@ -117,7 +123,8 @@ create_costume(
   price: price,
   category: category,
   user: users[i % users.size],
-  image_url: url
+  image_url: url,
+  wearers: wearers
 )
 end
 

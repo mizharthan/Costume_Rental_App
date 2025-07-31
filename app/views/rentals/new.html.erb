@@ -3,44 +3,41 @@
        data-controller="rental-price"
        data-rental-price-price-per-day-value="<%= @costume.price_per_day.to_f %>">
 
-    <h1 class="mb-4">Costume Rental Request Form</h1>
+  <% if @costume.photo.attached? %>
+    <%= image_tag @costume.photo, class: "img-fluid mb-3", style: "max-height: 300px;" %>
+  <% end %>
 
-    <% if @costume.photo.attached? %>
-      <%= image_tag @costume.photo, class: "img-fluid mb-3", style: "max-height: 300px;" %>
-    <% end %>
+  <h2><%= @costume.name %></h2>
 
-    <h2 class="mb-4"><%= @costume.name %></h2>
+  <%= simple_form_for [@costume, @rental] do |f| %>
+    <div class="form-group mb-3">
+      <%= f.select :wearer, @costume.wearer_list, prompt: "Select a wearer", class: "form-control", id: "wearer-select" %>
+    </div>
 
-    <%= simple_form_for [@costume, @rental] do |f| %>
-      <div class="form-group mb-3">
-        <!-- ✅ Wrap start_date -->
-        <div data-rental-price-target="startDate">
-          <%= f.input :start_date, as: :date, label: "Start Date",
-                input_html: {
-                  class: "form-control",
-                  data: {
-                    action: "change->rental-price#calculate"
-                  }
-                } %>
-        </div>
+    <div class="form-group mb-3">
+      <%= f.input :start_date, as: :date, html5: true, label: "Start Date", input_html: {
+            id: "start-date",
+            class: "form-control",
+            data: {
+              rental_price_target: "startDate",
+              action: "input->rental-price#calculate change->rental-price#calculate"
+            }
+          } %>
 
-        <!-- ✅ Wrap end_date -->
-        <div data-rental-price-target="endDate">
-          <%= f.input :end_date, as: :date, label: "End Date",
-                input_html: {
-                  class: "form-control",
-                  data: {
-                    action: "change->rental-price#calculate"
-                  }
-                } %>
-        </div>
-      </div>
+      <%= f.input :end_date, as: :date, html5: true, label: "End Date", input_html: {
+            id: "end-date",
+            class: "form-control",
+            data: {
+              rental_price_target: "endDate",
+              action: "input->rental-price#calculate change->rental-price#calculate"
+            }
+          } %>
+    </div>
 
-      <p>Price per day: €<%= '%.2f' % @costume.price_per_day %></p>
-      <p>Total price: €<span data-rental-price-target="totalPrice">0.00</span></p>
+    <p>Price per day: €<%= '%.2f' % @costume.price_per_day %></p>
+    <p>Total price: €<span data-rental-price-target="totalPrice">0.00</span></p>
 
-      <%= f.button :submit, "Send Rental Request", class: "btn btn-primary mt-3" %>
-    <% end %>
+    <%= f.button :submit, "Send Rental Request", class: "btn btn-primary mt-3" %>
+  <% end %>
 
   </div>
-</div>

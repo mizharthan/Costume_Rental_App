@@ -50,7 +50,12 @@
       <% end %>
 
       <!-- Optional: Add-to-wishlist or share buttons here -->
-
+      <div class="my-3">
+      <% ["Man", "Woman", "Boy", "Girl"].each do |wearer| %>
+      <% has_wearer = @costume.wearer_list.include?(wearer) %>
+        <%= link_to wearer, costumes_path(wearer: wearer), class: "btn btn-sm mx-1 mb-2 #{has_wearer ? "btn-primary" : "btn-outline-secondary"}" %>
+      <% end %>
+      </div>
     <!-- 📏 Sizing Chart -->
     <div class="mt-4">
       <h5 class="mb-2">📏 Sizing Chart (cm)</h5>

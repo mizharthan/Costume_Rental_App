@@ -4,15 +4,23 @@ class CostumesController < ApplicationController
   def index
     @costumes = Costume.all
 
+    # Search by name
     if params[:query].present?
       @costumes = Costume.where("name ILIKE ?", "%#{params[:query].downcase}%")
-    else
-      @costumes = Costume.all
+    end
+
+    # Filter by wearer
+    if params[:wearer].present?
+      @costumes = Costume.tagged_with(params[:wearer], on: :wearers)
     end
   end
 
   def show
     @costume = Costume.find(params[:id])
+  end
+
+  def my_listings
+    @costumes = current_user.costumes
   end
 
   def new
@@ -39,6 +47,6 @@ class CostumesController < ApplicationController
   private
 
   def costume_params
-    params.require(:costume).permit(:name, :size, :description, :price_per_day, :image)
+    params.require(:costume).permit(:name, :size, :description, :price_per_day, :image, wearer_list: [])
   end
 end

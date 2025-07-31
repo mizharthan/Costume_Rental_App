@@ -2,7 +2,7 @@
 
 <div class="d-inline-flex mb-4">
   <%= link_to "My Requests", rentals_path, class: "btn btn-ghost btn-left-rounded" %>
-  <%= link_to "Requests for My Costumes", owner_requests_rentals_path, class: "btn btn-ghost btn-right-rounded active" %>
+  <%= link_to "Requests for My Costumes", rental_requests_path, class: "btn btn-ghost btn-right-rounded active" %>
 </div>
 
   <h1 class="mb-4">Rental Requests for My Costumes</h1>
@@ -24,14 +24,32 @@
             <p class="mb-1">
               <strong>Total:</strong> ¥<%= total_price %> for <%= days %> day<%= 's' if days > 1 %>
             </p>
+
+          <% if rental.not_confirmed? %>
+            <div class="d-flex gap-2 mt-2">
+              <%= simple_form_for rental, url: rental_path(rental), method: :patch do |f| %>
+                <%= f.input :status, as: :hidden, input_html: { value: 'accepted' } %>
+                <%= f.submit 'Accept', class: 'btn btn-success btn-sm' %>
+              <% end %>
+
+              <%= simple_form_for rental, url: rental_path(rental), method: :patch do |f| %>
+                <%= f.input :status, as: :hidden, input_html: { value: 'rejected' } %>
+                <%= f.submit 'Reject', class: 'btn btn-danger btn-sm' %>
+              <% end %>
+            </div>
+          <% else %>
             <p class="mb-0">
-              <strong>Status:</strong> <%= rental.status.capitalize %>
+              <strong>Status:</strong>
+              <% if rental.accepted? %>
+                <span class="badge bg-success">Accepted</span>
+              <% elsif rental.rejected? %>
+                <span class="badge bg-danger">Rejected</span>
+              <% else %>
+                <span class="badge bg-secondary"><%= rental.status.humanize %></span>
+              <% end %>
             </p>
-            <% if rental.status == "not_confirmed" %>
-              <%= link_to "Accept", rental_path(rental, status: "Accepted"), method: :patch, class: "btn btn-success btn-sm me-2" %>
-              <%= link_to "Decline", rental_path(rental, status: "Declined"), method: :patch, class: "btn btn-danger btn-sm" %>
-            <% end %>
-          </div>
+          <% end %>
+        </div>
 
           <!-- Right: Image -->
           <div class="col-md-4 text-center p-3">

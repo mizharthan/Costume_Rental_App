@@ -4,6 +4,8 @@ ruby "3.3.5"
 gem "ostruct"
 gem "cloudinary"
 gem "activestorage-cloudinary-service"
+gem 'acts-as-taggable-on', github: 'mbleigh/acts-as-taggable-on'
+
 
 # Bundle edge Rails instead: gem "rails", github: "rails/rails", branch: "main"
 gem "rails", "~> 7.1.5", ">= 7.1.5.1"

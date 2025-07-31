@@ -8,7 +8,7 @@
     <div class="card-body text-center">
       <h5 class="card-title"><%= costume.name %></h5>
       <p class="card-text"><%= costume.description %></p>
-      <p class="card-text"><strong>Є<%= costume.price_per_day %>/day</strong></p>
+      <p class="card-text"><strong>Є<%= '%.2f' % costume.price_per_day %>/day</strong></p>
       <%= link_to "View details", costume_path(costume), class: "btn btn-outline-primary" %>
     </div>
   </div>

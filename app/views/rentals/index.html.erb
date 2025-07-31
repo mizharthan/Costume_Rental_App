@@ -2,7 +2,7 @@
 
 <div class="d-inline-flex mb-4">
   <%= link_to "My Requests", rentals_path, class: "btn btn-ghost btn-left-rounded active" %>
-  <%= link_to "Requests for My Costumes", owner_requests_rentals_path, class: "btn btn-ghost btn-right-rounded" %>
+  <%= link_to "Requests for My Costumes", rental_requests_path, class: "btn btn-ghost btn-right-rounded" %>
 </div>
 
   <h1 class="mb-4">My Rental Requests</h1>
@@ -25,8 +25,9 @@
               <strong>Total:</strong> €<%= total_price %> for <%= days %> day<%= 's' if days > 1 %>
             </p>
             <p class="mb-0">
-              <strong>Status:</strong> <%= rental.status.capitalize %>
+              <strong>Status:</strong> <%= rental.status&.humanize || "Unknown" %>
             </p>
+            <%= rental.wearer_list.to_s %>
           </div>
 
           <!-- Right: Image -->

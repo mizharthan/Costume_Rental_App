@@ -13,10 +13,13 @@ export default class extends Controller {
   calculate() {
     console.log("🔁 Triggered calculation")
 
-    const start = this.extractDateFrom("startDate")
-    const end = this.extractDateFrom("endDate")
+    const startDateStr = this.startDateTarget.value
+    const endDateStr = this.endDateTarget.value
 
-    if (start && end) {
+    if (startDateStr && endDateStr) {
+      const start = new Date(startDateStr)
+      const end = new Date(endDateStr)
+
       const utcStart = Date.UTC(start.getFullYear(), start.getMonth(), start.getDate())
       const utcEnd = Date.UTC(end.getFullYear(), end.getMonth(), end.getDate())
 
@@ -28,28 +31,11 @@ export default class extends Controller {
         console.log(`✅ ${days} day(s), €${total}`)
       } else {
         this.totalPriceTarget.textContent = "0.00"
-        console.log("⚠️ End date is before start date")
+        console.log("⚠️ End date is before or same as start date")
       }
     } else {
       this.totalPriceTarget.textContent = "0.00"
-      console.log("⚠️ Couldn’t parse dates")
+      console.log("⚠️ One or both date fields are blank")
     }
   }
-
-  extractDateFrom(targetName) {
-    const wrapper = this[`${targetName}Target`]
-    if (!wrapper) return null
-
-    const year = wrapper.querySelector(`[name*="(1i)"]`)?.value
-    const month = wrapper.querySelector(`[name*="(2i)"]`)?.value
-    const day = wrapper.querySelector(`[name*="(3i)"]`)?.value
-
-    if (year && month && day) {
-      return new Date(Number(year), Number(month) - 1, Number(day)) // Month is 0-indexed
-    }
-
-    return null
-  }
-
-
 }
