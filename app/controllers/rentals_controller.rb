@@ -34,6 +34,15 @@ class RentalsController < ApplicationController
     end
   end
 
+  def update
+    @rental = Rental.find(params[:id])
+    if @rental.update(rental_params)
+      redirect_to owner_requests_rentals_path, notice: "Rental request status updated!"
+    else
+      redirect_to Owner_requests_rentals_path, alert: "Could not update status."
+    end
+  end
+
   def destroy
     @rental = Rental.find(params[:id])
     if @rental.user == current_user
@@ -45,7 +54,7 @@ class RentalsController < ApplicationController
   private
 
   def rental_params
-    params.require(:rental).permit(:start_date, :end_date)
+    params.require(:rental).permit(:start_date, :end_date, :status)
   end
 
   def rental_duration
