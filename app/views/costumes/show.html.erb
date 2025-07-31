@@ -1,13 +1,102 @@
-<div class = "container d-flex flex-column align-items-center text-center my-5">
-  <h1><%= @costume.name %></h1>
+<div class="container my-5">
+  <div class="row mb-5" data-controller="image-switcher">
+    <!-- Left: Thumbnails -->
+    <div class="col-md-2 d-flex flex-column align-items-center gap-2">
+      <% if @costume.photo.attached? %>
+        <!-- Cover photo as thumbnail -->
+        <%= image_tag url_for(@costume.photo),
+              data: { image_switcher_target: "thumbnail", action: "click->image-switcher#switch" },
+              class: "img-fluid rounded border",
+              style: "height: 80px; width: auto; cursor: pointer;" %>
+      <% end %>
 
-  <% if @costume.photo.attached? %>
-    <%= image_tag @costume.photo, class: "img-fluid rounded shadow-sm mb-4", style: "max-height: 400px;" %>
-  <% end %>
+      <% @costume.photos.each do |photo| %>
+        <%= image_tag url_for(photo),
+              data: { image_switcher_target: "thumbnail", action: "click->image-switcher#switch" },
+              class: "img-fluid rounded border",
+              style: "height: 80px; width: auto; cursor: pointer;" %>
+      <% end %>
 
-<p><%= @costume.description %></p>
-<p>Size: <%= @costume.size %></p>
-<p><strong>Price per day: €<%= '%.2f' % @costume.price_per_day %></strong></p>
+      <!-- Optional: Hardcoded Pikachu -->
+      <%= image_tag "https://assets.pokemon.com/assets/cms2/img/pokedex/full/025.png",
+            data: { image_switcher_target: "thumbnail", action: "click->image-switcher#switch" },
+            class: "img-fluid rounded border",
+            style: "height: 80px; width: auto; cursor: pointer;" %>
+    </div>
 
-  <%= link_to "Create a Rental Request", new_costume_rental_path(@costume), class: "btn btn-primary btn-lg" %>
+    <!-- Center: Main Image -->
+    <div class="col-md-5 text-center">
+      <%= image_tag url_for(@costume.photo),
+            data: { image_switcher_target: "main" },
+            id: "main-image",
+            class: "img-fluid rounded shadow-sm",
+            style: "max-height: 500px;" %>
+    </div>
+
+    <!-- Right: Product Info -->
+    <div class="col-md-5">
+      <h1><%= @costume.name %></h1>
+      <p class="text-muted">Categories: <em>(coming soon)</em></p>
+      <p><strong>Size:</strong> <%= @costume.size %></p>
+      <p><strong>Price per day:</strong> €<%= '%.2f' % @costume.price_per_day %></p>
+      <p><%= @costume.description %></p>
+
+      <%= link_to "Create a Rental Request", new_costume_rental_path(@costume), class: "btn btn-primary btn-lg mt-3" %>
+      
+      <% if current_user == @costume.user %>
+        <%= link_to "Delete Costume", costume_path(@costume), method: :delete,
+          data: { confirm: "Are you sure you want to delete this costume?" },
+          class: "btn btn-danger" %>
+      <% end %>
+
+      <!-- Optional: Add-to-wishlist or share buttons here -->
+
+    <!-- 📏 Sizing Chart -->
+    <div class="mt-4">
+      <h5 class="mb-2">📏 Sizing Chart (cm)</h5>
+      <table class="table table-sm table-bordered text-center mb-0">
+        <thead class="table-light">
+          <tr>
+            <th>Size</th>
+            <th>Chest</th>
+            <th>Waist</th>
+            <th>Height</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>S</td><td>80–85</td><td>60–65</td><td>155–165</td></tr>
+          <tr><td>M</td><td>86–91</td><td>66–72</td><td>160–170</td></tr>
+          <tr><td>L</td><td>92–98</td><td>73–80</td><td>165–175</td></tr>
+          <tr><td>XL</td><td>99–105</td><td>81–88</td><td>170–185</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="mb-5"></div> <!-- adds space between row and next section -->
+  <!-- 🧥 Similar Costumes -->
+  <hr />
+  <div class="container mb-5">
+    <h3 class="mb-3">🧥 You May Also Like</h3>
+    <div class="row">
+      <% 3.times do |i| %>
+        <div class="col-md-4 mb-3">
+          <div class="card shadow-sm">
+            <img src="https://via.placeholder.com/300x200?text=Similar+Costume+<%= i + 1 %>" class="card-img-top" alt="Similar Costume">
+            <div class="card-body text-center">
+              <h5 class="card-title">Similar Costume <%= i + 1 %></h5>
+              <p class="card-text text-muted">Category Placeholder</p>
+            </div>
+          </div>
+        </div>
+      <% end %>
+    </div>
+  </div>
+
+  <!-- ⭐ Reviews -->
+  <hr />
+  <div class="container mb-5">
+    <h3 class="mb-3">⭐ Customer Reviews</h3>
+    <p class="text-muted">No reviews yet. Be the first to try this costume!</p>
+  </div>
 </div>

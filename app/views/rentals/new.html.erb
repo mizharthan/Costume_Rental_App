@@ -38,11 +38,10 @@
         }
       }
 
-      // Bind on multiple input events for reliability
-      ["change", "input"].forEach(event => {
-        startDateInput.addEventListener(event, calculateTotal);
-        endDateInput.addEventListener(event, calculateTotal);
-      });
+    ["change", "input"].forEach(event => {
+      startDateInput.addEventListener(event, calculateTotal);
+      endDateInput.addEventListener(event, calculateTotal);
+    });
 
       calculateTotal(); // Initial run
     });
