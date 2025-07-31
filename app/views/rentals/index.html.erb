@@ -1,8 +1,14 @@
 <div class="container px-3 px-md-5 my-5">
+
+<div class="d-inline-flex mb-4">
+  <%= link_to "My Requests", rentals_path, class: "btn btn-ghost btn-left-rounded active" %>
+  <%= link_to "Requests for My Costumes", rental_requests_path, class: "btn btn-ghost btn-right-rounded" %>
+</div>
+
   <h1 class="mb-4">My Rental Requests</h1>
 
   <% if @rentals.any? %>
-    <% @rentals.each do |rental| %>
+    <% @rentals.reverse.each do |rental| %>
       <% days = (rental.end_date - rental.start_date).to_i %>
       <% total_price = days * rental.costume.price_per_day %>
 
@@ -16,10 +22,10 @@
               <%= rental.start_date.strftime('%Y-%m-%d') %> – <%= rental.end_date.strftime('%Y-%m-%d') %>
             </p>
             <p class="mb-1">
-              <strong>Total:</strong> ¥<%= total_price %> for <%= days %> day<%= 's' if days > 1 %>
+              <strong>Total:</strong> €<%= total_price %> for <%= days %> day<%= 's' if days > 1 %>
             </p>
             <p class="mb-0">
-              <strong>Status:</strong> <%= rental.status.capitalize %>
+              <strong>Status:</strong> <%= rental.status&.humanize || "Unknown" %>
             </p>
             <%= rental.wearer_list.to_s %>
           </div>

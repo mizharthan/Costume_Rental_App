@@ -1,59 +1,54 @@
-<div class="container py-4" style="max-width: 600px;">
-  <div class="text-center">
+<div class="d-flex flex-column align-items-center justify-content-center" style="min-height: 100vh; text-align: center;">
+  <h1>Costume Rental Request Form</h1>
 
-    <h1 class="mb-4">Costume Rental Request Form</h1>
+  <% if @costume.photo.attached? %>
+    <%= image_tag @costume.photo, class: "img-fluid mb-3", style: "max-height: 300px;" %>
+  <% end %>
 
-    <% if @costume.photo.attached? %>
-      <%= image_tag @costume.photo, class: "img-fluid mb-3", style: "max-height: 300px;" %>
-    <% end %>
+  <h2><%= @costume.name %></h2>
 
-    <h2 class="mb-4"><%= @costume.name %></h2>
+  <%= simple_form_for [@costume, @rental] do |f| %>
+    <div class="form-group mb-3">
+      <%= f.select :wearer, @costume.wearer_list, prompt: "Select a wearer", class: "form-control", id: "wearer-select" %>
+    </div>
 
-    <%= simple_form_for [@costume, @rental] do |f| %>
-      <div class="form-group mb-3">
-        <%= f.select :wearer, @costume.wearer_list, prompt: "Select a wearer", class: "form-control", id: "wearer-select" %>
-      </div>
+    <div class="form-group mb-3">
+      <%= f.input :start_date, as: :date, html5: true, label: "Start Date", input_html: { id: "start-date", class: "form-control" } %>
+      <%= f.input :end_date, as: :date, html5: true, label: "End Date", input_html: { id: "end-date", class: "form-control" } %>
+    </div>
 
-      <div class="form-group mb-3">
-        <%= f.input :start_date, as: :date, label: "Start Date", input_html: { id: "start-date", class: "form-control" } %>
-        <%= f.input :end_date, as: :date, label: "End Date", input_html: { id: "end-date", class: "form-control" } %>
-      </div>
+    <p>Price per day: €<%= '%.2f' % @costume.price_per_day %></p>
+    <p>Total price: €<span id="total-price">0.00</span></p>
 
-      <p>Price per day: €<%= '%.2f' % @costume.price_per_day %></p>
-      <p>Total price: €<span id="total-price">0.00</span></p>
+    <%= f.button :submit, "Send Rental Request", class: "btn btn-primary mt-3" %>
+  <% end %>
 
-      <%= f.button :submit, "Send Rental Request", class: "btn btn-primary mt-3" %>
-    <% end %>
+  <%= javascript_tag do %>
+    document.addEventListener("turbo:load", function() {
+      const startDateInput = document.getElementById("start-date");
+      const endDateInput = document.getElementById("end-date");
+      const totalPriceSpan = document.getElementById("total-price");
+      const pricePerDay = <%= (@costume.price_per_day || 0).to_f.to_json.html_safe %>;
 
-  </div>
+      function calculateTotal() {
+        const startDate = new Date(startDateInput.value);
+        const endDate = new Date(endDateInput.value);
+
+        if (!isNaN(startDate) && !isNaN(endDate) && endDate >= startDate) {
+          const days = Math.floor((endDate - startDate) / (1000 * 60 * 60 * 24)) + 1;
+          totalPriceSpan.textContent = (days * pricePerDay).toFixed(2);
+        } else {
+          totalPriceSpan.textContent = "0.00";
+        }
+      }
+
+      ["change", "input"].forEach(event => {
+        startDateInput.addEventListener(event, calculateTotal);
+        endDateInput.addEventListener(event, calculateTotal);
+      });
+
+      calculateTotal(); // Initial run
+    });
+  <% end %>
 </div>
 
-<%= javascript_tag do %>
-  document.addEventListener("turbo:load", function() {
-    const startDateInput = document.getElementById("start-date");
-    const endDateInput = document.getElementById("end-date");
-    const totalPriceSpan = document.getElementById("total-price");
-    const pricePerDay = <%= (@costume.price_per_day || 0).to_f.to_json.html_safe %>;
-    const wearerSelect = document.getElementById("wearer-select");
-    const form = wearerSelect.closest("form");
-
-    function calculateTotal() {
-      const startDate = new Date(startDateInput.value);
-      const endDate = new Date(endDateInput.value);
-
-      if (!isNaN(startDate) && !isNaN(endDate) && endDate >= startDate) {
-        const days = Math.floor((endDate - startDate) / (1000 * 60 * 60 * 24)) + 1;
-        totalPriceSpan.textContent = (days * pricePerDay).toFixed(2);
-      } else {
-        totalPriceSpan.textContent = "0.00";
-      }
-    }
-
-    ["change", "input"].forEach(event => {
-      startDateInput.addEventListener(event, calculateTotal);
-      endDateInput.addEventListener(event, calculateTotal);
-    });
-
-    calculateTotal(); // Initial run
-  });
-<% end %>

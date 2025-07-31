@@ -1,0 +1,75 @@
+<div class="container px-3 px-md-5 my-5">
+
+<div class="d-inline-flex mb-4">
+  <%= link_to "My Requests", rentals_path, class: "btn btn-ghost btn-left-rounded" %>
+  <%= link_to "Requests for My Costumes", rental_requests_path, class: "btn btn-ghost btn-right-rounded active" %>
+</div>
+
+  <h1 class="mb-4">Rental Requests for My Costumes</h1>
+
+  <% if @rentals.any? %>
+    <% @rentals.each do |rental| %>
+      <% days = (rental.end_date - rental.start_date).to_i %>
+      <% total_price = days * rental.costume.price_per_day %>
+
+      <div class="card mb-4 shadow-sm border-0">
+        <div class="row g-0 align-items-center">
+          <!-- Left: Details -->
+          <div class="col-md-8 p-4">
+            <h4 class="card-title mb-2"><%= rental.costume.name %></h4>
+            <p class="mb-1">
+              <strong>Rental Period:</strong>
+              <%= rental.start_date.strftime('%Y-%m-%d') %> – <%= rental.end_date.strftime('%Y-%m-%d') %>
+            </p>
+            <p class="mb-1">
+              <strong>Total:</strong> ¥<%= total_price %> for <%= days %> day<%= 's' if days > 1 %>
+            </p>
+
+          <% if rental.not_confirmed? %>
+            <div class="d-flex gap-2 mt-2">
+              <%= simple_form_for rental, url: rental_path(rental), method: :patch do |f| %>
+                <%= f.input :status, as: :hidden, input_html: { value: 'accepted' } %>
+                <%= f.submit 'Accept', class: 'btn btn-success btn-sm' %>
+              <% end %>
+
+              <%= simple_form_for rental, url: rental_path(rental), method: :patch do |f| %>
+                <%= f.input :status, as: :hidden, input_html: { value: 'rejected' } %>
+                <%= f.submit 'Reject', class: 'btn btn-danger btn-sm' %>
+              <% end %>
+            </div>
+          <% else %>
+            <p class="mb-0">
+              <strong>Status:</strong>
+              <% if rental.accepted? %>
+                <span class="badge bg-success">Accepted</span>
+              <% elsif rental.rejected? %>
+                <span class="badge bg-danger">Rejected</span>
+              <% else %>
+                <span class="badge bg-secondary"><%= rental.status.humanize %></span>
+              <% end %>
+            </p>
+          <% end %>
+        </div>
+
+          <!-- Right: Image -->
+          <div class="col-md-4 text-center p-3">
+            <% if rental.costume.photo.attached? %>
+              <%= cl_image_tag rental.costume.photo.key,
+                    height: 180,
+                    width: 280,
+                    crop: :fill,
+                    class: "img-fluid rounded",
+                    alt: rental.costume.name %>
+            <% else %>
+              <%= image_tag "https://via.placeholder.com/280x180?text=No+Image",
+                    class: "img-fluid rounded",
+                    alt: "No image available" %>
+            <% end %>
+          </div>
+        </div>
+      </div>
+    <% end %>
+  <% else %>
+    <p class="text-muted">No rental requests for your costumes have been made yet.</p>
+  <% end %>
+</div>

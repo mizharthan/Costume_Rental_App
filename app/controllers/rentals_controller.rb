@@ -2,7 +2,16 @@ class RentalsController < ApplicationController
   before_action :authenticate_user!
 
   def index
+    # current user rental requests they made
     @rentals = current_user.rentals.includes(:costume)
+  end
+
+  def owner_requests
+    # requests for the costumes the current user owns
+    @rentals = Rental
+    .joins(:costume)
+    .where(costumes: { user_id: current_user.id })
+    .order(created_at: :desc)
   end
 
   def new
@@ -27,6 +36,15 @@ class RentalsController < ApplicationController
     end
   end
 
+  def update
+    @rental = Rental.find(params[:id])
+    if @rental.update(rental_params)
+      redirect_to owner_requests_rentals_path, notice: "Rental request status updated!"
+    else
+      redirect_to Owner_requests_rentals_path, alert: "Could not update status."
+    end
+  end
+
   def destroy
     @rental = Rental.find(params[:id])
     if @rental.user == current_user
@@ -38,7 +56,7 @@ class RentalsController < ApplicationController
   private
 
   def rental_params
-    params.require(:rental).permit(:start_date, :end_date, :wearer)
+    params.require(:rental).permit(:start_date, :end_date, :wearer, :status)
   end
 
   def rental_duration

@@ -19,6 +19,10 @@ class CostumesController < ApplicationController
     @costume = Costume.find(params[:id])
   end
 
+  def my_listings
+    @costumes = current_user.costumes
+  end
+
   def new
     @costume = Costume.new
   end
@@ -32,6 +36,12 @@ class CostumesController < ApplicationController
     else
       render :new, status: :unprocessable_entity
     end
+  end
+
+  def destroy
+    @costume = Costume.find(params[:id])
+    @costume.destroy
+    redirect_to root_path, notice: "Costume was successfully deleted."
   end
 
   private
