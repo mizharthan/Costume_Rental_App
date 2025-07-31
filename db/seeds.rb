@@ -41,7 +41,7 @@ def create_costume( name:, size:, description:, price:, category:, user:, image_
       image: image_url
     )
 
-    costume.photo.attach(
+    costume.photos.attach(
       io: downloaded_image,
       filename: "#{name.parameterize}.jpg",
       content_type: downloaded_image.content_type || "image/jpeg"
