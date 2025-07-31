@@ -16,7 +16,7 @@
 <div class="container mt-5">
   <h1 class="mb-4">Explore costumes</h1>
 
-    <% [["Popular Costumes", @popular_costumes], ["Superhero Costumes", @superhero_costumes], ["Anime Costumes", @anime_costumes], ["All Costumes", @anime_costumes]].each do |title, costumes| %>
+    <% [["Popular Costumes", @popular_costumes], ["Superhero Costumes", @superhero_costumes], ["Anime Costumes", @anime_costumes], ["All Costumes", @all_costumes]].each do |title, costumes| %>
       <h2 class="mt-5"><%= title %></h2>
         <div class="row">
           <% costumes.each do |costume| %>
