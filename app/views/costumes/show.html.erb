@@ -18,7 +18,7 @@
       <% end %>
 
       <!-- Optional: Hardcoded Pikachu -->
-      <%= image_tag "https://assets.pokemon.com/assets/cms2/img/pokedex/full/025.png",
+      <%# <%= image_tag "https://assets.pokemon.com/assets/cms2/img/pokedex/full/025.png",
             data: { image_switcher_target: "thumbnail", action: "click->image-switcher#switch" },
             class: "img-fluid rounded border",
             style: "height: 80px; width: auto; cursor: pointer;" %>
@@ -26,11 +26,19 @@
 
     <!-- Center: Main Image -->
     <div class="col-md-5 text-center">
-      <%= image_tag url_for(@costume.photo),
-            data: { image_switcher_target: "main" },
-            id: "main-image",
-            class: "img-fluid rounded shadow-sm",
-            style: "max-height: 500px;" %>
+      <% if @costume.photo.attached? %>
+        <%= image_tag url_for(@costume.photo),
+              data: { image_switcher_target: "main" },
+              id: "main-image",
+              class: "img-fluid rounded shadow-sm",
+              style: "max-height: 500px;" %>
+      <% else %>
+        <%= image_tag "https://assets.pokemon.com/assets/cms2/img/pokedex/full/025.png",
+              data: { image_switcher_target: "main" },
+              id: "main-image",
+              class: "img-fluid rounded shadow-sm",
+              style: "max-height: 500px;" %>
+      <% end %>
     </div>
 
     <!-- Right: Product Info -->
@@ -42,7 +50,7 @@
       <p><%= @costume.description %></p>
 
       <%= link_to "Create a Rental Request", new_costume_rental_path(@costume), class: "btn btn-primary btn-lg mt-3" %>
-      
+
       <% if current_user == @costume.user %>
         <%= link_to "Delete Costume", costume_path(@costume), method: :delete,
           data: { confirm: "Are you sure you want to delete this costume?" },
