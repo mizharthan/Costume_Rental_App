@@ -3,7 +3,8 @@ source "https://rubygems.org"
 ruby "3.3.5"
 gem "ostruct"
 gem "cloudinary"
-gem 'acts-as-taggable-on'
+gem "activestorage-cloudinary-service"
+gem 'acts-as-taggable-on', github: 'mbleigh/acts-as-taggable-on'
 
 
 # Bundle edge Rails instead: gem "rails", github: "rails/rails", branch: "main"

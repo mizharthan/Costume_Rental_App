@@ -2,7 +2,7 @@ class Costume < ApplicationRecord
   belongs_to :user
   has_many :rentals, dependent: :destroy
   has_many_attached :photos
-  # has_one_attached :photo
+  has_one_attached :photo
 
   acts_as_taggable_on :wearers
 

@@ -11,6 +11,10 @@
 
     <%= simple_form_for [@costume, @rental] do |f| %>
       <div class="form-group mb-3">
+        <%= f.select :wearer, @costume.wearer_list, prompt: "Select a wearer", class: "form-control", id: "wearer-select" %>
+      </div>
+
+      <div class="form-group mb-3">
         <%= f.input :start_date, as: :date, label: "Start Date", input_html: { id: "start-date", class: "form-control" } %>
         <%= f.input :end_date, as: :date, label: "End Date", input_html: { id: "end-date", class: "form-control" } %>
       </div>
@@ -30,6 +34,8 @@
     const endDateInput = document.getElementById("end-date");
     const totalPriceSpan = document.getElementById("total-price");
     const pricePerDay = <%= (@costume.price_per_day || 0).to_f.to_json.html_safe %>;
+    const wearerSelect = document.getElementById("wearer-select");
+    const form = wearerSelect.closest("form");
 
     function calculateTotal() {
       const startDate = new Date(startDateInput.value);

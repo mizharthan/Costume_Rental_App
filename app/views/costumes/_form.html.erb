@@ -26,13 +26,22 @@
     <%= form.text_field :image %> <!-- Optional: replace with file_field if using uploads -->
   </div>
 
-  <div>
-    <%= form.label :wearer_list, "Wearer Type" %><br>
-    <% ["Adult", "Man", "Woman", "Kid", "Boy", "Girl"].each do |wearer| %>
-      <%= check_box_tag "costume[wearer_list][]", wearer, costume.wearer_list.include?(wearer), id: "wearer_#{wearer}" %>
-      <%= label_tag "werare_#{wearer}", wearer %><br>
+<div>
+    <label>Wearer Type (Men & Boys)</label><br>
+    <% ["Man", "Boy"].each do |wearer| %>
+      <%= form.check_box :wearer_list, { multiple: true }, wearer, nil %>
+      <%= wearer %><br>
     <% end %>
   </div>
+
+  <div>
+    <label>Wearer Type (Women & Girls)</label><br>
+    <% ["Woman", "Girl"].each do |wearer| %>
+      <%= form.check_box :wearer_list, { multiple: true }, wearer, nil %>
+      <%= wearer %><br>
+    <% end %>
+  </div>
+
 
   <!-- Hidden field: user_id is set from current_user -->
   <%= form.hidden_field :user_id, value: current_user.id %>
