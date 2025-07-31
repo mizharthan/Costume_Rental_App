@@ -1,5 +1,7 @@
 <div class="container py-4" style="max-width: 600px;">
-  <div class="text-center">
+  <div class="text-center"
+       data-controller="rental-price"
+       data-rental-price-price-per-day-value="<%= @costume.price_per_day.to_f %>">
 
     <h1 class="mb-4">Costume Rental Request Form</h1>
 
@@ -11,43 +13,34 @@
 
     <%= simple_form_for [@costume, @rental] do |f| %>
       <div class="form-group mb-3">
-        <%= f.input :start_date, as: :date, label: "Start Date", input_html: { id: "start-date", class: "form-control" } %>
-        <%= f.input :end_date, as: :date, label: "End Date", input_html: { id: "end-date", class: "form-control" } %>
+        <!-- ✅ Wrap start_date -->
+        <div data-rental-price-target="startDate">
+          <%= f.input :start_date, as: :date, label: "Start Date",
+                input_html: {
+                  class: "form-control",
+                  data: {
+                    action: "change->rental-price#calculate"
+                  }
+                } %>
+        </div>
+
+        <!-- ✅ Wrap end_date -->
+        <div data-rental-price-target="endDate">
+          <%= f.input :end_date, as: :date, label: "End Date",
+                input_html: {
+                  class: "form-control",
+                  data: {
+                    action: "change->rental-price#calculate"
+                  }
+                } %>
+        </div>
       </div>
 
       <p>Price per day: €<%= '%.2f' % @costume.price_per_day %></p>
-      <p>Total price: €<span id="total-price">0.00</span></p>
+      <p>Total price: €<span data-rental-price-target="totalPrice">0.00</span></p>
 
       <%= f.button :submit, "Send Rental Request", class: "btn btn-primary mt-3" %>
     <% end %>
 
   </div>
 </div>
-
-<%= javascript_tag do %>
-  document.addEventListener("turbo:load", function() {
-    const startDateInput = document.getElementById("start-date");
-    const endDateInput = document.getElementById("end-date");
-    const totalPriceSpan = document.getElementById("total-price");
-    const pricePerDay = <%= (@costume.price_per_day || 0).to_f.to_json.html_safe %>;
-
-    function calculateTotal() {
-      const startDate = new Date(startDateInput.value);
-      const endDate = new Date(endDateInput.value);
-
-      if (!isNaN(startDate) && !isNaN(endDate) && endDate >= startDate) {
-        const days = Math.floor((endDate - startDate) / (1000 * 60 * 60 * 24)) + 1;
-        totalPriceSpan.textContent = (days * pricePerDay).toFixed(2);
-      } else {
-        totalPriceSpan.textContent = "0.00";
-      }
-    }
-
-    ["change", "input"].forEach(event => {
-      startDateInput.addEventListener(event, calculateTotal);
-      endDateInput.addEventListener(event, calculateTotal);
-    });
-
-    calculateTotal(); // Initial run
-  });
-<% end %>
