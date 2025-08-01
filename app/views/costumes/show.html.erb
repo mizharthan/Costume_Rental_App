@@ -36,13 +36,13 @@
     <!-- Right: Product Info -->
     <div class="col-md-5">
       <h1><%= @costume.name %></h1>
-      <p class="text-muted">Categories: <em>(coming soon)</em></p>
+      <p class="text-muted">Categories: <em><%= @costume.category %></em></p>
       <p><strong>Size:</strong> <%= @costume.size %></p>
       <p><strong>Price per day:</strong> €<%= '%.2f' % @costume.price_per_day %></p>
       <p><%= @costume.description %></p>
 
       <%= link_to "Create a Rental Request", new_costume_rental_path(@costume), class: "btn btn-primary btn-lg mt-3" %>
-      
+
       <% if current_user == @costume.user %>
         <%= link_to "Delete Costume", costume_path(@costume), method: :delete,
           data: { confirm: "Are you sure you want to delete this costume?" },
