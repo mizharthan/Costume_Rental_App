@@ -44,7 +44,7 @@
     <!-- Right: Product Info -->
     <div class="col-md-5">
       <h1><%= @costume.name %></h1>
-      <p class="text-muted">Categories: <em>(coming soon)</em></p>
+      <p class="text-muted">Categories: <em><%= @costume.category %></em></p>
       <p><strong>Size:</strong> <%= @costume.size %></p>
       <p><strong>Price per day:</strong> €<%= '%.2f' % @costume.price_per_day %></p>
       <p><%= @costume.description %></p>
