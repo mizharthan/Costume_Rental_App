@@ -56,7 +56,7 @@ class CostumesController < ApplicationController
   def destroy
     @costume = Costume.find(params[:id])
     @costume.destroy
-    redirect_to root_path, notice: "Costume was successfully deleted."
+    redirect_to my_costumes_path, notice: "Costume was successfully deleted."
   end
 
   def edit
