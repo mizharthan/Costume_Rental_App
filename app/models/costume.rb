@@ -7,5 +7,6 @@ class Costume < ApplicationRecord
   acts_as_taggable_on :wearers
 
   CATEGORIES = ["Popular costumes", "Superhero costumes", "Anime costumes"]
+  WEARERS = ["Men", "Women", "Boy", "Girl"]
   validates :name, :size, :description, :price_per_day, presence: true
 end
