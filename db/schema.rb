@@ -64,8 +64,8 @@ ActiveRecord::Schema[7.1].define(version: 2025_07_31_111214) do
     t.float "price"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.string "wearer"
     t.integer "status", default: 0, null: false
+    t.string "wearer"
     t.index ["costume_id"], name: "index_rentals_on_costume_id"
     t.index ["user_id"], name: "index_rentals_on_user_id"
   end

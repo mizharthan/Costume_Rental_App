@@ -18,10 +18,10 @@
           <!-- Left -->
           <div class="col-md-8 p-4">
             <h4 class="card-title mb-2"><%= rental.costume.name %></h4>
-            
+
             <p class="mb-1">
               <strong>Wearer:</strong> <%= rental.wearer_list.to_s %>
-              
+
             <p class="mb-1">
               <strong>Rental Period:</strong>
               <%= rental.start_date.strftime('%Y-%m-%d') %> – <%= rental.end_date.strftime('%Y-%m-%d') %>
@@ -32,7 +32,16 @@
             </p>
 
             <p class="mb-0">
-              <strong>Status:</strong> <%= rental.status&.humanize || "Unknown" %>
+              <strong>Status:</strong>
+              <% if rental.accepted? %>
+                <span class="badge bg-success">Accepted</span>
+              <% elsif rental.rejected? %>
+                <span class="badge bg-danger">Rejected</span>
+              <% elsif rental.not_confirmed? %>
+                <span class="badge bg-secondary">Pending</span>
+              <% else %>
+                <span class="badge bg-secondary"><%= rental.status.humanize %></span>
+              <% end %>
             </p>
 
             <div class="mt-3">

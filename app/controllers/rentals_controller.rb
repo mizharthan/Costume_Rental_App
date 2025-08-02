@@ -39,9 +39,9 @@ class RentalsController < ApplicationController
   def update
     @rental = Rental.find(params[:id])
     if @rental.update(rental_params)
-      redirect_to owner_requests_rentals_path, notice: "Rental request status updated!"
+      redirect_to rental_requests_path, notice: "Rental request status updated!"
     else
-      redirect_to Owner_requests_rentals_path, alert: "Could not update status."
+      redirect_to rental_requests_path, alert: "Could not update status."
     end
   end
 
