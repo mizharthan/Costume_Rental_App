@@ -16,12 +16,6 @@
               class: "img-fluid rounded border",
               style: "height: 80px; width: auto; cursor: pointer;" %>
       <% end %>
-
-      <!-- Optional: Hardcoded Pikachu -->
-      <%# <%= image_tag "https://assets.pokemon.com/assets/cms2/img/pokedex/full/025.png",
-            data: { image_switcher_target: "thumbnail", action: "click->image-switcher#switch" },
-            class: "img-fluid rounded border",
-            style: "height: 80px; width: auto; cursor: pointer;" %>
     </div>
 
     <!-- Center: Main Image -->
@@ -49,44 +43,51 @@
       <p><strong>Price per day:</strong> €<%= '%.2f' % @costume.price_per_day %></p>
       <p><%= @costume.description %></p>
 
-      <%= link_to "Create a Rental Request", new_costume_rental_path(@costume), class: "btn btn-primary btn-lg mt-3" %>
+      <!-- Buttons side by side -->
+      <div class="d-flex align-items-center mt-3 gap-3">
+        <%= link_to "Create a Rental Request", new_costume_rental_path(@costume), class: "btn btn-primary btn-lg" %>
 
-      <% if current_user == @costume.user %>
-        <%= link_to "Delete Costume", costume_path(@costume),
-          data: { turbo_method: :delete, turbo_confirm: "Are you sure you want to delete this costume?" },
-          class: "btn btn-danger" %>
-      <% end %>
-
-      <!-- Optional: Add-to-wishlist or share buttons here -->
-      <div class="my-3">
-      <% ["Man", "Woman", "Boy", "Girl"].each do |wearer| %>
-      <% has_wearer = @costume.wearer_list.include?(wearer) %>
-        <%= link_to wearer, costumes_path(wearer: wearer), class: "btn btn-sm mx-1 mb-2 #{has_wearer ? "btn-primary" : "btn-outline-secondary"}" %>
-      <% end %>
+        <% if current_user == @costume.user %>
+          <%= link_to "Delete Costume", costume_path(@costume),
+            data: { turbo_method: :delete, turbo_confirm: "Are you sure you want to delete this costume?" },
+            class: "text-danger text-decoration-underline small fw-bold" %>
+        <% end %>
       </div>
-    <!-- 📏 Sizing Chart -->
-    <div class="mt-4">
-      <h5 class="mb-2">📏 Sizing Chart (cm)</h5>
-      <table class="table table-sm table-bordered text-center mb-0">
-        <thead class="table-light">
-          <tr>
-            <th>Size</th>
-            <th>Chest</th>
-            <th>Waist</th>
-            <th>Height</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr><td>S</td><td>80–85</td><td>60–65</td><td>155–165</td></tr>
-          <tr><td>M</td><td>86–91</td><td>66–72</td><td>160–170</td></tr>
-          <tr><td>L</td><td>92–98</td><td>73–80</td><td>165–175</td></tr>
-          <tr><td>XL</td><td>99–105</td><td>81–88</td><td>170–185</td></tr>
-        </tbody>
-      </table>
+
+      <!-- Wearer type buttons -->
+      <div class="my-3">
+        <% ["Man", "Woman", "Boy", "Girl"].each do |wearer| %>
+          <% has_wearer = @costume.wearer_list.include?(wearer) %>
+          <%= link_to wearer, costumes_path(wearer: wearer), class: "btn btn-sm mx-1 mb-2 #{has_wearer ? "btn-primary" : "btn-outline-secondary"}" %>
+        <% end %>
+      </div>
+
+      <!-- 📏 Sizing Chart -->
+      <div class="mt-4">
+        <h5 class="mb-2">📏 Sizing Chart (cm)</h5>
+        <table class="table table-sm table-bordered text-center mb-0">
+          <thead class="table-light">
+            <tr>
+              <th>Size</th>
+              <th>Chest</th>
+              <th>Waist</th>
+              <th>Height</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td>S</td><td>80–85</td><td>60–65</td><td>155–165</td></tr>
+            <tr><td>M</td><td>86–91</td><td>66–72</td><td>160–170</td></tr>
+            <tr><td>L</td><td>92–98</td><td>73–80</td><td>165–175</td></tr>
+            <tr><td>XL</td><td>99–105</td><td>81–88</td><td>170–185</td></tr>
+          </tbody>
+        </table>
+      </div>
     </div>
   </div>
 
-  <div class="mb-5"></div> <!-- adds space between row and next section -->
+  <!-- Space between sections -->
+  <div class="mb-5"></div>
+
   <!-- 🧥 Similar Costumes -->
   <hr />
   <div class="container mb-5">
@@ -98,9 +99,8 @@
             <% if similar.photo.attached? %>
               <%= image_tag similar.photo, class: "card-img-top", alt: similar.name, style: "height: 200px; object-fit: cover;" %>
             <% else %>
-              <img src="https://via.placeholder.com/300x200?text=No+Image" class="card-img-top" alt="No Image" style="height: 200px; object-fit: cover;">
+              <img src="https://via.placeholder.com/300x200?text=No+Image" class="card-img-top" alt="No Image" style: "height: 200px; object-fit: cover;">
             <% end %>
-
             <div class="card-body text-center" style="min-height: 100px;">
               <h5 class="card-title"><%= similar.name %></h5>
               <p class="card-text text-muted"><%= similar.category %></p>
