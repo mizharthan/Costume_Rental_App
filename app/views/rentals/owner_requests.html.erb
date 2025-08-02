@@ -22,7 +22,7 @@
               <%= rental.start_date.strftime('%Y-%m-%d') %> – <%= rental.end_date.strftime('%Y-%m-%d') %>
             </p>
             <p class="mb-1">
-              <strong>Total:</strong> ¥<%= total_price %> for <%= days %> day<%= 's' if days > 1 %>
+              <strong>Total:</strong> €<%= total_price %> for <%= days %> day<%= 's' if days > 1 %>
             </p>
 
           <% if rental.not_confirmed? %>
