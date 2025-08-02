@@ -57,6 +57,13 @@
           <% end %>
         </div>
       </div>
+    
+    <%= form.label :category, "Category (optional)" %><br>
+    <%= form.select :category,
+      options_for_select([["Select a category", nil]] + Costume::CATEGORIES.map { |c| [c, c] }, costume.category),
+      {},
+      class: "form-control" %>
+  </div>
 
       <div class="text-center mt-5">
         <%= form.submit "Create Costume", class: "btn btn-primary btn-lg px-5 py-3" %>
