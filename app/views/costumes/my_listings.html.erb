@@ -7,8 +7,10 @@
   <% if @costumes.any? %>
     <div class="row justify-content-center">
       <% @costumes.each do |costume| %>
-        <%= render partial: "card", locals: { costume: costume } %>
+        <%= render partial: "card", locals: { costume: costume, editable: true } %>
       <% end %>
+
+
     </div>
   <% else %>
     <div class="text-center">
