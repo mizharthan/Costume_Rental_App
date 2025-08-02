@@ -13,6 +13,8 @@ Rails.application.routes.draw do
   get "pages/home", to: "pages#home"
   # i don't think we need the line above since we already have line 4 but can optimize later.
   get "search", to: "pages#search"
+  get "search", to: "costumes#index"
+
   get "my_costumes", to: "costumes#my_listings", as: "my_costumes"
 
   resources :costumes do
@@ -21,4 +23,3 @@ Rails.application.routes.draw do
 
   resources :rentals, only: [:index, :update, :destroy]
 end
-

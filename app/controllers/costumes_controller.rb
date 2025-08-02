@@ -4,9 +4,13 @@ class CostumesController < ApplicationController
   def index
     @costumes = Costume.all
 
-    # Search by name
+    # Search by name, category
     if params[:query].present?
-      @costumes = Costume.where("name ILIKE ?", "%#{params[:query].downcase}%")
+      query = "%#{params[:query]}%"
+      @costumes = @costumes.where(
+        "name ILIKE :q OR description ILIKE :q OR category ILIKE :q OR size::text ILIKE :q",
+        q: query
+      )
     end
 
     # Filter by wearer
