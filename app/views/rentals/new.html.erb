@@ -1,43 +1,93 @@
-<div class="container py-4" style="max-width: 600px;">
-  <div class="text-center"
-       data-controller="rental-price"
-       data-rental-price-price-per-day-value="<%= @costume.price_per_day.to_f %>">
-
-  <% if @costume.photo.attached? %>
-    <%= image_tag @costume.photo, class: "img-fluid mb-3", style: "max-height: 300px;" %>
-  <% end %>
-
-  <h2><%= @costume.name %></h2>
+<div class="container-fluid py-5" style="background-color: #f8f9fa;">
+  <h1 class="text-center mb-5" style="font-size: 2.8rem;">Costume Rental Request Form</h1>
 
   <%= simple_form_for [@costume, @rental] do |f| %>
-    <div class="form-group mb-3">
-      <%= f.select :wearer, @costume.wearer_list, prompt: "Select a wearer", class: "form-control", id: "wearer-select" %>
+    <div class="row g-4 align-items-stretch">
+
+      <!-- Left-->
+      <div class="col-lg-8">
+        <div class="p-4 bg-white rounded shadow-sm h-100 text-center">
+          <% if @costume.photo.attached? %>
+            <%= image_tag @costume.photo, class: "img-fluid mb-4", style: "max-height: 500px;" %>
+          <% end %>
+
+          <h2 class="mb-4" style="font-size: 2rem;"><%= @costume.name %></h2>
+
+          <div class="form-group text-start">
+            <div class="row">
+              <div class="col-md-6">
+                <%= f.input :start_date, as: :string, label: "Start Date", input_html: { id: "start-date", class: "form-control-lg datepicker-input", placeholder: "Select a Date" } %>
+              </div>
+              <div class ="col-md-6">
+                <%= f.input :end_date, as: :string, label: "End Date", input_html: { id: "end-date", class: "form-control-lg datepicker-input", placeholder: "Select a Date" } %>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+<!-- Right -->
+<div class="col-lg-4">
+  <div class="p-4 bg-white rounded shadow-sm d-flex flex-column">
+    <h3 class="mb-3 text-center">Payment Information</h3>
+
+    <div class="mb-4 text-center">
+      <i class="fa-brands fa-cc-visa fa-3x text-primary me-3"></i>
+      <i class="fa-brands fa-cc-mastercard fa-3x text-danger me-3"></i>
+      <i class="fa-brands fa-cc-amex fa-3x text-info"></i>
     </div>
 
     <div class="form-group mb-3">
-      <%= f.input :start_date, as: :date, html5: true, label: "Start Date", input_html: {
-            id: "start-date",
-            class: "form-control",
-            data: {
-              rental_price_target: "startDate",
-              action: "input->rental-price#calculate change->rental-price#calculate"
-            }
-          } %>
-
-      <%= f.input :end_date, as: :date, html5: true, label: "End Date", input_html: {
-            id: "end-date",
-            class: "form-control",
-            data: {
-              rental_price_target: "endDate",
-              action: "input->rental-price#calculate change->rental-price#calculate"
-            }
-          } %>
+      <label for="card-number"><i class="fa-solid fa-credit-card me-2"></i>Card Number</label>
+      <input type="text" id="card-number" class="form-control form-control-lg" placeholder="1234 5678 9012 3456" required>
     </div>
 
-    <p>Price per day: €<%= '%.2f' % @costume.price_per_day %></p>
-    <p>Total price: €<span data-rental-price-target="totalPrice">0.00</span></p>
+    <div class="form-group mb-3">
+      <label for="expiry"><i class="fa-regular fa-calendar me-2"></i>Expiry Date</label>
+      <input type="text" id="expiry" class="form-control form-control-lg" placeholder="MM/YY" required>
+    </div>
 
-    <%= f.button :submit, "Send Rental Request", class: "btn btn-primary mt-3" %>
+    <div class="form-group mb-4">
+      <label for="cvc"><i class="fa-solid fa-lock me-2"></i>CVC</label>
+      <input type="text" id="cvc" class="form-control form-control-lg" placeholder="123" required>
+    </div>
+
+    <div class="bg-light p-3 rounded shadow-sm">
+      <h4 class="text-center mb-3">Price Details</h4> <!-- Centered heading -->
+      <p class="mb-1 text-start">Price per day: €<%= '%.2f' % @costume.price_per_day %></p> <!-- Left aligned -->
+      <p class="text-start">Total price: €<span id="total-price"></span></p> <!-- Left aligned -->
+    </div>
+
+    <div class="text-center mt-5">
+      <%= f.button :submit, "Send Rental Request", class: "btn btn-primary btn-lg px-5 py-3" %>
+    </div>
   <% end %>
 
-  </div>
+  <%= javascript_tag do %>
+    document.addEventListener("turbo:load", function() {
+      const startDateInput = document.getElementById("start-date");
+      const endDateInput = document.getElementById("end-date");
+      const totalPriceSpan = document.getElementById("total-price");
+      const pricePerDay = <%= (@costume.price_per_day || 0).to_f.to_json.html_safe %>;
+
+      function calculateTotal() {
+        const startDate = new Date(startDateInput.value);
+        const endDate = new Date(endDateInput.value);
+
+        if (!isNaN(startDate) && !isNaN(endDate) && endDate >= startDate) {
+          const days = Math.floor((endDate - startDate) / (1000 * 60 * 60 * 24)) + 1;
+          totalPriceSpan.textContent = (days * pricePerDay).toFixed(2);
+        } else {
+          totalPriceSpan.textContent = "0.00";
+        }
+      }
+
+      ["change", "input"].forEach(event => {
+        startDateInput.addEventListener(event, calculateTotal);
+        endDateInput.addEventListener(event, calculateTotal);
+      });
+
+      calculateTotal();
+    });
+  <% end %>
+</div>
