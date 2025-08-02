@@ -7,6 +7,12 @@ import flatpickr from "flatpickr";
 
 document.addEventListener("turbo:load", () => {
   console.log("Initializing flatpickr");
-  flatpickr("#start-date", { dateFormat: "Y-m-d" });
-  flatpickr("#end-date", { dateFormat: "Y-m-d" });
+  flatpickr("#start-date", {
+    dateFormat: "Y-m-d",
+    minDate: "today"
+  });
+  flatpickr("#end-date", {
+    dateFormat: "Y-m-d",
+    minDate: "today"
+  });
 });

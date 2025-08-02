@@ -1,0 +1,11 @@
+<div class="d-flex justify-content-end mb-4">
+  <div style="width: 300px;">
+    <%= form_with url: costumes_path, method: :get, class: "d-flex" do %>
+      <%= text_field_tag :query,
+            "",
+            class: "form-control me-2",
+            placeholder: "Search for costumes..." %>
+      <%= submit_tag "Search", name: "", class: "btn btn-primary" %>
+    <% end %>
+  </div>
+</div>
