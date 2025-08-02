@@ -25,7 +25,7 @@
       <% if local_assigns[:editable] %>
         <div class="d-flex justify-content-center gap-2">
           <%= link_to "Edit", edit_costume_path(costume), class: "btn btn-sm btn-warning" %>
-          <%= link_to "Delete", costume_path(costume), method: :delete, data: { confirm: "Are you sure?" }, class: "btn btn-sm btn-danger" %>
+          <%= link_to "Delete", costume_path(costume), data: { turbo_method: :delete, turbo_confirm: "Are you sure?" }, class: "btn btn-sm btn-danger" %>
         </div>
       <% end %>
     </div>
