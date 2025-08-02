@@ -1,1 +1,21 @@
-<h1>EMPTY INSERT CODE LATER</h1>
+<div class="container py-5">
+  <div class="text-center mb-4">
+    <h1 class="fw-bold">🧥 My Costume Listings</h1>
+    <p class="text-muted">Here are all the costumes you've uploaded.</p>
+  </div>
+
+  <% if @costumes.any? %>
+    <div class="row justify-content-center">
+      <% @costumes.each do |costume| %>
+        <%= render partial: "card", locals: { costume: costume } %>
+      <% end %>
+    </div>
+  <% else %>
+    <div class="text-center">
+      <div class="alert alert-info">
+        You haven't uploaded any costumes yet.
+      </div>
+      <%= link_to "Upload a Costume", new_costume_path, class: "btn btn-primary mt-3" %>
+    </div>
+  <% end %>
+</div>
