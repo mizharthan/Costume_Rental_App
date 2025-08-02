@@ -1,53 +1,63 @@
-<%= form_with(model: costume, local: true, html: { multipart: true }) do |form| %>
-  <h2>Make a Costume</h2>
+<%= form_with(model: costume, local: true, html: { multipart: true, class: "needs-validation" }) do |form| %>
+  <div class="container py-5 d-flex justify-content-center">
+    <div class="p-4 bg-white rounded shadow-sm" style="max-width: 800px; width: 100%;">
 
-  <div>
-    <%= form.label :size, "Costume Size" %><br>
-    <%= form.text_field :size %>
-  </div>
+      <h2 class="text-center mb-4" style="font-size: 2rem;">Make a Costume</h2>
 
-  <div>
-    <%= form.label :name, "Costume Name" %><br>
-    <%= form.text_field :name %>
-  </div>
+      <div class="mb-4">
+        <%= form.label :name, "Costume Name", class: "form-label fw-bold" %>
+        <%= form.text_field :name, class: "form-control form-control-lg" %>
+      </div>
 
-  <div>
-    <%= form.label :description, "Costume Description" %><br>
-    <%= form.text_area :description %>
-  </div>
+      <div class="mb-4">
+        <%= form.label :size, "Costume Size", class: "form-label fw-bold" %>
+        <%= form.text_field :size, class: "form-control form-control-lg" %>
+      </div>
 
-  <div>
-    <%= form.label :price_per_day, "Price per Day (¥)" %><br>
-    <%= form.number_field :price_per_day %>
-  </div>
+      <div class="mb-4">
+        <%= form.label :description, "Costume Description", class: "form-label fw-bold" %>
+        <%= form.text_area :description, rows: 4, class: "form-control form-control-lg" %>
+      </div>
 
-  <div>
-    <%= form.label :photo, "Cover Photo" %><br>
-    <%= form.file_field :photo %> <!-- for single cover photo -->
-  </div>
+      <div class="mb-4">
+        <%= form.label :price_per_day, "Price per Day (€)", class: "form-label fw-bold" %>
+        <%= form.number_field :price_per_day, class: "form-control form-control-lg" %>
+      </div>
 
-  <div>
-    <%= form.label :photos, "Additional Photos" %><br>
-    <%= form.file_field :photos, multiple: true %> <!-- for multiple additional photos -->
-  </div>
+      <div class="mb-4">
+        <%= form.label :photo, "Cover Photo", class: "form-label fw-bold" %>
+        <%= form.file_field :photo, class: "form-control form-control-lg" %>
+      </div>
 
-<div>
-    <label>Wearer Type (Men & Boys)</label><br>
-    <% ["Man", "Boy"].each do |wearer| %>
-      <%= form.check_box :wearer_list, { multiple: true }, wearer, nil %>
-      <%= wearer %><br>
-    <% end %>
-  </div>
+      <div class="mb-4">
+        <%= form.label :photos, "Additional Photos", class: "form-label fw-bold" %>
+        <%= form.file_field :photos, multiple: true, class: "form-control form-control-lg" %>
+      </div>
 
-  <div>
-    <label>Wearer Type (Women & Girls)</label><br>
-    <% ["Woman", "Girl"].each do |wearer| %>
-      <%= form.check_box :wearer_list, { multiple: true }, wearer, nil %>
-      <%= wearer %><br>
-    <% end %>
-  </div>
+      <div class="mt-4">
+        <h5 class="fw-bold mb-2">Wearer Type (Men & Boys)</h5>
+        <div class="d-flex gap-3 flex-wrap">
+          <% ["Man", "Boy"].each do |wearer| %>
+            <div class="form-check">
+              <%= form.check_box :wearer_list, { multiple: true, class: "form-check-input" }, wearer, nil %>
+              <%= form.label :wearer_list, wearer, value: wearer, class: "form-check-label" %>
+            </div>
+          <% end %>
+        </div>
+      </div>
 
-  <div>
+      <div class="mt-3">
+        <h5 class="fw-bold mb-2">Wearer Type (Women & Girls)</h5>
+        <div class="d-flex gap-3 flex-wrap">
+          <% ["Woman", "Girl"].each do |wearer| %>
+            <div class="form-check">
+              <%= form.check_box :wearer_list, { multiple: true, class: "form-check-input" }, wearer, nil %>
+              <%= form.label :wearer_list, wearer, value: wearer, class: "form-check-label" %>
+            </div>
+          <% end %>
+        </div>
+      </div>
+    
     <%= form.label :category, "Category (optional)" %><br>
     <%= form.select :category,
       options_for_select([["Select a category", nil]] + Costume::CATEGORIES.map { |c| [c, c] }, costume.category),
@@ -55,5 +65,9 @@
       class: "form-control" %>
   </div>
 
-  <%= form.submit "Create Costume" %>
+      <div class="text-center mt-5">
+        <%= form.submit "Create Costume", class: "btn btn-primary btn-lg px-5 py-3" %>
+      </div>
+    </div>
+  </div>
 <% end %>
