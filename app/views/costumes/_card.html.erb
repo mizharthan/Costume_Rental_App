@@ -1,16 +1,17 @@
 <div class="col-12 col-sm-6 col-md-4 col-lg-3 mb-4">
-  <div class="card h-100 shadow-sm" style="min-height: 100%;">
+  <div class="card h-100 shadow-sm d-flex flex-column">
 
     <% if costume.photo.attached? %>
       <%= cl_image_tag costume.photo.key,
             height: 200,
             width: 300,
             crop: :fill,
+            gravity: :auto,
             class: "card-img-top img-fluid",
             alt: costume.name %>
     <% else %>
       <%= image_tag "https://via.placeholder.com/300x200?text=No+Image",
-            class: "card-img-top",
+            class: "card-img-top img-fluid",
             alt: "No image available" %>
     <% end %>
 
@@ -18,7 +19,16 @@
       <h5 class="card-title mb-2"><%= costume.name %></h5>
       <p class="card-text small text-muted mb-2"><%= truncate(costume.description, length: 60) %></p>
       <p class="card-text fw-bold mb-3">€<%= '%.2f' % costume.price_per_day %>/day</p>
-      <%= link_to "View details", costume_path(costume), class: "btn btn-outline-primary mt-auto" %>
+
+      <%= link_to "View details", costume_path(costume), class: "btn btn-outline-primary mb-2" %>
+
+      <% if local_assigns[:editable] %>
+        <div class="d-flex justify-content-center gap-2">
+          <%= link_to "Edit", edit_costume_path(costume), class: "btn btn-sm btn-warning" %>
+          <%= link_to "Delete", costume_path(costume), method: :delete, data: { confirm: "Are you sure?" }, class: "btn btn-sm btn-danger" %>
+        </div>
+      <% end %>
     </div>
+
   </div>
 </div>
