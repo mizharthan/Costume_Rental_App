@@ -1,4 +1,4 @@
-<%= form_with(model: costume, local: true) do |form| %>
+<%= form_with(model: costume, local: true, html: { multipart: true }) do |form| %>
   <h2>Make a Costume</h2>
 
   <div>
@@ -22,12 +22,33 @@
   </div>
 
   <div>
-    <%= form.label :image, "Costume Image URL" %><br>
-    <%= form.text_field :image %> <!-- Optional: replace with file_field if using uploads -->
+    <%= form.label :photo, "Cover Photo" %><br>
+    <%= form.file_field :photo %> <!-- for single cover photo -->
   </div>
 
+  <div>
+    <%= form.label :photos, "Additional Photos" %><br>
+    <%= form.file_field :photos, multiple: true %> <!-- for multiple additional photos -->
+  </div>
+
+<div>
+    <label>Wearer Type (Men & Boys)</label><br>
+    <% ["Man", "Boy"].each do |wearer| %>
+      <%= form.check_box :wearer_list, { multiple: true }, wearer, nil %>
+      <%= wearer %><br>
+    <% end %>
+  </div>
+
+  <div>
+    <label>Wearer Type (Women & Girls)</label><br>
+    <% ["Woman", "Girl"].each do |wearer| %>
+      <%= form.check_box :wearer_list, { multiple: true }, wearer, nil %>
+      <%= wearer %><br>
+    <% end %>
+  </div>
+
+
   <!-- Hidden field: user_id is set from current_user -->
-  <%= form.hidden_field :user_id, value: current_user.id %>
 
   <%= form.submit "Create Costume" %>
 <% end %>

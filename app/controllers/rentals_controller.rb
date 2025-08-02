@@ -17,6 +17,7 @@ class RentalsController < ApplicationController
   def new
     @costume = Costume.find(params[:costume_id])
     @rental = Rental.new
+    @selected_wearer = params[:wearer]
   end
 
   def create
@@ -26,6 +27,7 @@ class RentalsController < ApplicationController
     @rental.costume = @costume
     @rental.status = "not_confirmed"
     @rental.price = @costume.price_per_day * rental_duration
+    @rental.wearer_list.add(rental_params[:wearer])
 
     if @rental.save
       redirect_to rentals_path, notice: "Your rental request has been sent!"
@@ -54,7 +56,7 @@ class RentalsController < ApplicationController
   private
 
   def rental_params
-    params.require(:rental).permit(:start_date, :end_date, :status)
+    params.require(:rental).permit(:start_date, :end_date, :wearer, :status)
   end
 
   def rental_duration

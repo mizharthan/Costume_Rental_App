@@ -18,7 +18,10 @@
           <!-- Left -->
           <div class="col-md-8 p-4">
             <h4 class="card-title mb-2"><%= rental.costume.name %></h4>
-
+            
+            <p class="mb-1">
+              <strong>Wearer:</strong> <%= rental.wearer_list.to_s %>
+              
             <p class="mb-1">
               <strong>Rental Period:</strong>
               <%= rental.start_date.strftime('%Y-%m-%d') %> – <%= rental.end_date.strftime('%Y-%m-%d') %>
