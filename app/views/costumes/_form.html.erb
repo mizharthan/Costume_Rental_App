@@ -47,8 +47,13 @@
     <% end %>
   </div>
 
-
-  <!-- Hidden field: user_id is set from current_user -->
+  <div>
+    <%= form.label :category, "Category (optional)" %><br>
+    <%= form.select :category,
+      options_for_select([["Select a category", nil]] + Costume::CATEGORIES.map { |c| [c, c] }, costume.category),
+      {},
+      class: "form-control" %>
+  </div>
 
   <%= form.submit "Create Costume" %>
 <% end %>
