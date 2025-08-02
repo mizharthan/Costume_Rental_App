@@ -92,15 +92,20 @@
   <div class="container mb-5">
     <h3 class="mb-3">🧥 You May Also Like</h3>
     <div class="row">
-      <% 3.times do |i| %>
+      <% @similar_costumes.each do |similar| %>
         <div class="col-md-4 mb-3">
-          <div class="card shadow-sm">
-            <img src="https://via.placeholder.com/300x200?text=Similar+Costume+<%= i + 1 %>" class="card-img-top" alt="Similar Costume">
-            <div class="card-body text-center">
-              <h5 class="card-title">Similar Costume <%= i + 1 %></h5>
-              <p class="card-text text-muted">Category Placeholder</p>
+          <%= link_to costume_path(similar), class: "card shadow-sm text-decoration-none text-dark h-100 d-block" do %>
+            <% if similar.photo.attached? %>
+              <%= image_tag similar.photo, class: "card-img-top", alt: similar.name, style: "height: 200px; object-fit: cover;" %>
+            <% else %>
+              <img src="https://via.placeholder.com/300x200?text=No+Image" class="card-img-top" alt="No Image" style="height: 200px; object-fit: cover;">
+            <% end %>
+
+            <div class="card-body text-center" style="min-height: 100px;">
+              <h5 class="card-title"><%= similar.name %></h5>
+              <p class="card-text text-muted"><%= similar.category %></p>
             </div>
-          </div>
+          <% end %>
         </div>
       <% end %>
     </div>

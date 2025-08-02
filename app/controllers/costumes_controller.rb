@@ -17,6 +17,16 @@ class CostumesController < ApplicationController
 
   def show
     @costume = Costume.find(params[:id])
+
+    @similar_costumes = Costume
+      .where(category: @costume.category)
+      .where.not(id: @costume.id)
+      .order("RANDOM()")
+      .limit(3)
+
+    if @similar_costumes.empty?
+      @similar_costumes = Costume.where.not(id: @costume.id).order("RANDOM()").limit(3)
+    end
   end
 
   def my_listings
