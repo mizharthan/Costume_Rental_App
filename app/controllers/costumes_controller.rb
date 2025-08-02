@@ -1,5 +1,6 @@
 class CostumesController < ApplicationController
   before_action :authenticate_user!
+  before_action :authorize_user!, only: [:edit, :update, :destroy]
 
   def index
     @costumes = Costume.all
@@ -54,6 +55,19 @@ class CostumesController < ApplicationController
     redirect_to root_path, notice: "Costume was successfully deleted."
   end
 
+  def edit
+    @costume = Costume.find(params[:id])
+  end
+
+  def update
+    @costume = Costume.find(params[:id])
+    if @costume.update(costume_params)
+      redirect_to @costume, notice: "Costume updated successfully."
+    else
+      render :edit, status: :unprocessable_entity
+    end
+  end
+
   private
 
   def costume_params
@@ -61,5 +75,12 @@ class CostumesController < ApplicationController
       :name, :size, :description, :price_per_day, :photo, :category,
       photos: [], wearer_list: []
     )
+  end
+
+  def authorize_user!
+    @costume = Costume.find(params[:id])
+    unless @costume.user == current_user
+      redirect_to root_path, alert: "You are not authorized to modify this costume."
+    end
   end
 end

@@ -1,0 +1,19 @@
+<div class="container py-5">
+  <h1 class="mb-4 text-center">✏️ Edit Costume</h1>
+
+  <%= simple_form_for @costume, html: { multipart: true } do |f| %>
+    <%= f.input :name %>
+    <%= f.input :size %>
+    <%= f.input :category %>
+    <%= f.input :description %>
+    <%= f.input :price_per_day %>
+    <%= f.input :wearer_list, as: :check_boxes, collection: Costume::WEARERS %>
+    <%= f.input :photo, as: :file, label: "Main photo (optional)" %>
+    <%= f.input :photos, as: :file, input_html: { multiple: true }, label: "Additional photos (optional)" %>
+
+    <div class="d-flex justify-content-center gap-3 mt-4">
+      <%= f.button :submit, "Update Costume", class: "btn btn-primary" %>
+      <%= link_to "Cancel", costume_path(@costume), class: "btn btn-secondary" %>
+    </div>
+  <% end %>
+</div>
